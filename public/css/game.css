@@ -62,39 +62,39 @@ body {
 
 li:nth-child(1) .character,
 li:nth-child(1) .click-area {
-  animation-duration: 1.06044s; }
+  animation-duration: 1.29338s; }
 
 li:nth-child(2) .character,
 li:nth-child(2) .click-area {
-  animation-duration: 1.27622s; }
+  animation-duration: 0.26496s; }
 
 li:nth-child(3) .character,
 li:nth-child(3) .click-area {
-  animation-duration: 0.27089s; }
+  animation-duration: 0.26651s; }
 
 li:nth-child(4) .character,
 li:nth-child(4) .click-area {
-  animation-duration: 0.71866s; }
+  animation-duration: 1.29405s; }
 
 li:nth-child(5) .character,
 li:nth-child(5) .click-area {
-  animation-duration: 1.37105s; }
+  animation-duration: 0.94036s; }
 
 li:nth-child(6) .character,
 li:nth-child(6) .click-area {
-  animation-duration: 0.67788s; }
+  animation-duration: 1.06006s; }
 
 li:nth-child(7) .character,
 li:nth-child(7) .click-area {
-  animation-duration: 0.89225s; }
+  animation-duration: 0.61211s; }
 
 li:nth-child(8) .character,
 li:nth-child(8) .click-area {
-  animation-duration: 0.84203s; }
+  animation-duration: 0.57606s; }
 
 li:nth-child(9) .character,
 li:nth-child(9) .click-area {
-  animation-duration: 1.23156s; }
+  animation-duration: 0.04041s; }
 
 .stopper {
   width: 100vw;
@@ -257,7 +257,7 @@ h2 {
 
 @keyframes bang {
   to {
-    box-shadow: -126px -208.66667px #006aff, -136px -187.66667px #2fff00, -83px -262.66667px #ff004d, -162px -188.66667px #8000ff, 31px -169.66667px #002fff, -140px 58.33333px #0051ff, -212px -192.66667px #00ffa2, 245px -310.66667px #ff00ae, 67px 21.33333px #09ff00, -56px 23.33333px #9100ff, 176px -117.66667px #ff9d00, 129px -196.66667px #c4ff00, 139px -391.66667px #ffbb00, -162px -33.66667px #1100ff, -185px -194.66667px #6f00ff, -120px -203.66667px #3300ff, -24px -362.66667px #ff2f00, 178px 44.33333px #ff0099, -91px -276.66667px #ff4400, -85px -396.66667px #ff5100, 63px -110.66667px #62ff00, 160px -182.66667px #ff00ae, 178px 78.33333px #ff0900, -62px -316.66667px #ff6200, 141px -385.66667px deepskyblue, -61px -409.66667px #ff9d00, 212px -354.66667px #00fffb, -89px -390.66667px #00ff99, -224px -162.66667px #00ffae, -25px -379.66667px #6a00ff, 223px 24.33333px #ff00d0, 225px -282.66667px #0088ff, 21px -372.66667px #00ff37, 18px -96.66667px #00ff84, -49px 27.33333px #00ff5e, -45px -223.66667px #0095ff, -113px -256.66667px #ff00cc, 241px -175.66667px #9500ff, 68px -197.66667px #00ffe6, -107px -312.66667px #ff004d, 9px -28.66667px #00ff77, -39px -18.66667px #4d00ff, -109px -59.66667px #ff0051, 205px -27.66667px #5900ff, 235px -126.66667px #ffee00, -148px -301.66667px #ff00f7, -240px -225.66667px #ff6f00, 166px -326.66667px #ffcc00, -193px -229.66667px #00ffbf, 203px -266.66667px #7700ff, -12px 34.33333px #0066ff; } }
+    box-shadow: 17px -117.66667px #002fff, 99px -260.66667px #00ff4d, 13px 10.33333px #6a00ff, -148px -181.66667px #0dff00, 94px -403.66667px #ff9d00, -185px 71.33333px #eaff00, -188px -213.66667px #2fff00, -248px -413.66667px #4400ff, 229px -37.66667px #ff3300, -185px -260.66667px #ff005e, -189px -135.66667px #00ff09, 59px -77.66667px #00ffd5, 71px -181.66667px #00f7ff, -48px 25.33333px #91ff00, -44px -189.66667px #00ff1e, 71px -190.66667px #00ff62, 59px -363.66667px #ff0015, 183px -30.66667px #00ff5e, -168px -403.66667px #ff0022, 52px -336.66667px #ff4800, 101px -296.66667px #40ff00, -62px 29.33333px #00ff22, 5px -250.66667px #ff3300, -248px -325.66667px #00ff95, 156px -407.66667px deepskyblue, -98px -393.66667px #00ff95, -221px -319.66667px #ff0040, -36px -242.66667px #00ff62, -63px -358.66667px #ff0015, 169px -384.66667px #fff200, 195px -370.66667px #000dff, 21px -319.66667px #2f00ff, -173px 34.33333px #00ff66, 191px 12.33333px #4400ff, 235px -380.66667px #00ff33, 29px -117.66667px #fbff00, -242px -88.66667px #d000ff, -27px -357.66667px #0004ff, 204px 27.33333px #4000ff, 123px -17.66667px #c400ff, 74px -85.66667px #ff00c4, -32px 55.33333px #fff700, -147px -328.66667px #ff00e1, 42px -314.66667px #11ff00, 11px -203.66667px #00ffb7, -144px 22.33333px #ff00f2, 142px -1.66667px #7300ff, 208px 53.33333px #6200ff, 106px -224.66667px #c800ff, 64px -213.66667px #00ff33, -65px -273.66667px #2600ff; } }
 
 @keyframes gravity {
   to {

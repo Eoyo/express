@@ -49,6 +49,9 @@ small {
 .head .name {
   font-size: 40px;
   padding: 10px 0 0 15px; }
+  .head .name > span {
+    font-size: 25px;
+    padding: 0 15px; }
 
 .head .aim {
   font-size: 20px;
