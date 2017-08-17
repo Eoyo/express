@@ -1,0 +1,54 @@
+* {
+  box-sizing: border-box;
+}
+
+.head .contact {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.resume {
+  background: none;
+}
+
+.img {
+  width: 123px;
+  height: 123px;
+  background: url('../images/lium.jpg?1474016552');
+  background-size: 100% 177.77778%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 100%;
+  border: 1px solid gray;
+}
+
+.head {
+  position: relative;
+}
+.head .name {
+  font-size: 40px;
+}
+.head .aim {
+  font-size: 20px;
+}
+.head .contact :nth-child(1) {
+  flex-grow: 1;
+}
+.head .contact :nth-child(2) {
+  flex-grow: 1;
+}
+.head :nth-child(1) {
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+.head :nth-child(2) {
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+.head :nth-child(3) {
+  left: 0;
+  top: 0;
+  position: absolute;
+}

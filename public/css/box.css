@@ -1,0 +1,383 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box; }
+
+* {
+  box-sizing: border-box; }
+
+.box {
+  border: 1px solid black;
+  margin: 32px; }
+
+.gameboard {
+  position: relative;
+  margin: 40px; }
+  .gameboard #bigtable {
+    border-collapse: collapse;
+    background: #dcdcd0;
+    position: absolute;
+    top: 0px;
+    left: 0px; }
+    .gameboard #bigtable tr {
+      height: 40px; }
+    .gameboard #bigtable td {
+      width: 39px; }
+  .gameboard .onelineQiwei {
+    width: 560px;
+    height: 40px;
+    position: relative; }
+  .gameboard .qiwei {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    background: #4d7;
+    box-shadow: 0 0 5px lightgray;
+    opacity: 0;
+    transition: opacity 0.2s;
+    line-height: 20px;
+    text-align: center;
+    color: gray;
+    cursor: pointer;
+    transition: transform .5s ,opacity .3s;
+    transform: scale(0.5); }
+    .gameboard .qiwei:active {
+      transform: scale(0.5); }
+  .gameboard .none:hover {
+    opacity: 1;
+    transform: scale(0.7); }
+  .gameboard .bai {
+    transform: scale(1);
+    opacity: 1;
+    background: white; }
+  .gameboard .hei {
+    transform: scale(1);
+    opacity: 1;
+    background: black;
+    box-shadow: 0 0 5px #9b9b8e; }
+  .gameboard .lastOne::before {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: solid 1px #f00;
+    transform: scale(1.2);
+    opacity: 0;
+    display: inline-block;
+    content: "";
+    animation: circleFocus 0.5s;
+    animation-fill-mode: forwards; }
+  .gameboard div {
+    user-select: none; }
+
+#wturnqi.boll, #wturnqi.bai, #wturnqi.hei {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px lightgray; }
+
+#wturnqi.bai {
+  background: white; }
+
+#wturnqi.hei {
+  background: black; }
+
+#login {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden; }
+  #login .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: gray;
+    opacity: 0.4; }
+  #login .loginTent {
+    padding: 50px;
+    opacity: 1;
+    position: relative;
+    height: 300px;
+    width: 500px;
+    margin: 50px auto;
+    background: white;
+    border: 1px solid gray; }
+  #login .wrong {
+    color: red; }
+  #login .ok {
+    color: #4d7; }
+  #login input {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 0 10px;
+    transition: border-color .5s; }
+    #login input.wrong {
+      border: 1px solid red; }
+    #login input.ok {
+      border: 1px solid red; }
+  #login.active {
+    opacity: 1;
+    visibility: visible; }
+
+#message {
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 200px;
+  opacity: 0;
+  background: white;
+  box-shadow: 0 3px 8px -1px gray;
+  border: 1px solid gray;
+  width: 300px;
+  height: 40px;
+  line-height: 30px;
+  padding: 5px; }
+  #message.active0 {
+    display: block;
+    animation: 4s forwards;
+    animation-name: ub80bdf8d; }
+
+@keyframes ub80bdf8d {
+  0% {
+    opacity: 0; }
+  20% {
+    opacity: 1; }
+  60% {
+    opacity: 1; }
+  100% {
+    opacity: 0;
+    display: none; } }
+  #message.active1 {
+    display: block;
+    animation: 4s forwards;
+    animation-name: u74c97a7a; }
+
+@keyframes u74c97a7a {
+  0% {
+    opacity: 0; }
+  20% {
+    opacity: 1; }
+  60% {
+    opacity: 1; }
+  100% {
+    opacity: 0;
+    display: none; } }
+  #message .close {
+    position: absolute;
+    font-family: "微软雅黑";
+    transform: scaleX(1.2);
+    right: 0px;
+    top: 0px;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    color: gray;
+    cursor: pointer;
+    line-height: 1em; }
+    #message .close:hover {
+      background: red;
+      color: white; }
+  #message .content {
+    width: 100%;
+    height: 3em; }
+
+#playerList {
+  width: 300px;
+  height: 200px; }
+
+@keyframes circleFocus {
+  0% {
+    opacity: 0;
+    transform: scale(0.7); }
+  20% {
+    opacity: 0.3;
+    transform: scale(0.98); }
+  50% {
+    opacity: 0;
+    transform: scale(1.4); }
+  to {
+    opacity: 1;
+    transform: scale 1.3; } }
+
+#msg {
+  width: 300px;
+  height: 560px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  border: 1px solid gray;
+  box-shadow: 5px 5px 5px lightgray; }
+
+#bigwap {
+  width: 700px; }
+
+#wturn {
+  background: #dcdcd0;
+  height: 60px; }
+
+#wturnqi {
+  position: static; }
+
+.wap {
+  float: left; }
+
+.mybt1 {
+  height: 35px; }
+  .mybt1 > div {
+    width: 99px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    float: left;
+    transition: background-color 0.2s; }
+    .mybt1 > div:hover {
+      background: #f1f1e0; }
+
+#msgtosend {
+  width: 296px;
+  position: relative;
+  float: bottom;
+  left: -1px;
+  bottom: -1px;
+  height: 23px; }
+
+body {
+  min-width: 1100px; }
+
+#lishimsg {
+  height: 355px;
+  background: #edede0; }
+
+/*div{
+				background: rgba(123,123,123,0.3);
+			}*/
+.wap hr {
+  margin: 0; }
+
+.msgtouxiang {
+  height: 40px;
+  width: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 20px;
+  line-height: 35px;
+  background: #dcdcd0; }
+
+.msgs {
+  position: relative;
+  top: 20px; }
+
+.mymsg {
+  height: 40px;
+  width: 300px; }
+  .mymsg > div {
+    float: left; }
+
+.click {
+  float: right;
+  height: 20px;
+  width: 20px;
+  font-size: 20px;
+  text-align: center;
+  line-height: 20px;
+  transition: background 0.2s; }
+  .click:hover {
+    background: #dcdcd0; }
+
+.head {
+  height: 35px;
+  width: 35px;
+  font-size: 20px;
+  line-height: 35px;
+  background: #dcdcd0; }
+
+.hesent > div {
+  float: left; }
+
+.words {
+  position: relative;
+  top: 10px;
+  background: #edede0;
+  margin: 5px 5px; }
+
+.chat {
+  height: 300px;
+  overflow: scroll; }
+  .chat > div {
+    height: 35px;
+    margin: 10px; }
+
+.mysent > div {
+  float: right; }
+
+#wanjia > div {
+  width: 200px;
+  height: 30px;
+  margin: 5px; }
+
+.traggle1 {
+  background: #fbc851; }
+
+.traggle0 {
+  background: #b2e229; }
+
+.traggle1:hover {
+  background: #f0c040; }
+
+.traggle0:hover {
+  background: #a5d519; }
+
+.corBackground {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: #000;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity .5s; }
+
+.corInsertHref {
+  position: absolute;
+  width: 600px;
+  height: 400px;
+  display: none;
+  background: white;
+  border: 1px solid gray;
+  box-shadow: 2px 2px 5px 1px gray;
+  z-index: 1000; }
+  .corInsertHref:hover {
+    border: 1px solid lightblue; }
+
+td {
+  font-family: "微软雅黑"; }
+
+.helpmsg {
+  opacity: 0;
+  color: #dcdcd0;
+  font-family: "微软雅黑";
+  position: relative;
+  top: 50px;
+  height: 100px;
+  width: 200px;
+  transition: opacity 0.5s, color 0.6s; }
+  .helpmsg:hover {
+    opacity: 1;
+    color: #303033; }
+
+#zhuce {
+  width: 60px;
+  height: 30px;
+  font-family: "微软雅黑";
+  text-align: center;
+  transition: box-shadow .5s;
+  border-radius: 9px;
+  box-shadow: 1px 1px 5px #D3D3D3; }
+
+.divnode {
+  height: 20px;
+  width: 20px; }

@@ -1,0 +1,10 @@
+@import "Tool.scss";
+.mytable {
+    @include Table((1,1,1,1,1),8px,80px){
+        width:100%;height: 300px;
+        .td{
+            min-width : 100px;
+            background: #3f3;
+        }
+    }
+}

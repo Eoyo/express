@@ -1,0 +1,1243 @@
+*:not(svg):not(canvas) {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box
+}
+
+body {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 100%;
+    max-height: 100%;
+    background-color: #fff;
+    -webkit-text-size-adjust: none
+}
+
+button {
+    outline: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0)
+}
+
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0
+}
+
+.button,#plot-fullscreen-button {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+    border-radius: 6px;
+    display: inline-block;
+    padding: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    margin: 0
+}
+
+.button.share:after {
+    content: "View in MathStudio"
+}
+
+.button.header {
+    float: right;
+    background-color: #fdf4ff;
+    margin: 6px 12px 5px 20px;
+    color: purple
+}
+
+#Find {
+    padding: 8px
+}
+
+#Find textarea {
+    font-size: 16px;
+    width: 270px;
+    height: 4em;
+    border-radius: 6px;
+    border: 2px solid #555;
+    outline: 0
+}
+
+#Find button {
+    background-color: darkmagenta;
+    color: white;
+    border: 0;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer
+}
+
+#fileViewer>div {
+    float: left;
+    width: 120px;
+    height: 120px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+    word-wrap: break-word;
+    cursor: pointer;
+    cursor: hand
+}
+
+#fileViewer>div>div:first-child {
+    background-image: url(images/document.gif);
+    background-size: contain;
+    width: 64px;
+    height: 64px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+#Catalog>div {
+    margin-top: .5em
+}
+
+#Catalog>div:nth-child(2) {
+    margin: 0
+}
+
+#Catalog>div>div:first-child {
+    font-weight: bold;
+    font-size: 22px;
+    padding: 4px;
+    padding-bottom: 2px;
+    color: darkmagenta
+}
+
+#Help>div {
+    font-weight: bold;
+    padding: 4px;
+    padding-bottom: 2px;
+    color: darkmagenta;
+    font-size: 18px;
+    margin-top: .5em
+}
+
+#Help>div:first-child {
+    margin: 0
+}
+
+#Catalog>div:first-child>div:first-child,#Help>div:first-child {
+    padding-top: 4px
+}
+
+#Catalog>div>button {
+    text-decoration: none;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-style: none;
+    background-color: transparent;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    color: black
+}
+
+#Help button {
+    text-decoration: none;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-style: none;
+    background-color: transparent;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none
+}
+
+#Catalog>div>button {
+    margin: 0;
+    padding: 4px;
+    font-weight: bold
+}
+
+#Help button {
+    padding: 4px;
+    margin: 0;
+    font-weight: normal;
+    color: black
+}
+
+#Catalog>div>button>span {
+    font-weight: normal;
+    font-style: italic;
+    color: black
+}
+
+#Catalog div.manual button {
+    font-size: 15px;
+    word-wrap: break-word;
+    border-style: none;
+    background-color: transparent;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    margin: 0;
+    color: black;
+    padding: 2px 0
+}
+
+#Catalog div.manual {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 6px;
+    background-color: #fafafa
+}
+
+#Catalog div.section {
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 1px;
+    color: darkmagenta
+}
+
+#Catalog>div>span>div {
+    padding-top: 4px;
+    padding-left: 8px
+}
+
+#Catalog div.description {
+    font-size: 15px;
+    margin-bottom: 1em
+}
+
+#Catalog div.parameters>div:nth-child(odd) {
+    color: darkmagenta;
+    margin-bottom: 1px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px
+}
+
+#Catalog div.description>div:first-child,#Catalog div.examples>div:first-child {
+    color: darkmagenta;
+    margin-bottom: 1px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px
+}
+
+#Catalog div.parameters>div:nth-child(odd) {
+    font-style: italic;
+    font-weight: normal
+}
+
+#Catalog div.examples ul {
+    padding-left: 1.5em
+}
+
+#Catalog div.parameters>div:nth-child(2n) {
+    margin-bottom: 1em
+}
+
+#Catalog hr {
+    height: 6px;
+    background-color: transparent
+}
+
+#Search.text:after {
+    text-align: center;
+    font-style: italic;
+    left: 12px;
+    top: 12px;
+    position: relative;
+    content: "No Entries"
+}
+
+#Search>input[type=text],#Catalog>input[type=text] {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 7px 4px;
+    outline: 0;
+    font-size: 15px;
+    border-bottom: 1px #ccc dotted
+}
+
+#Search>div>div {
+    display: block;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-align: left;
+    margin: 4px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 6px
+}
+
+#Options {
+    padding: 8px;
+    background-color: white
+}
+
+#Options>div:not(.options) {
+    font-style: italic;
+    font-size: 14px;
+    color: gray
+}
+
+#Options>hr.options {
+    margin: 1em 0;
+    height: 1px
+}
+
+#Options>div.options>div:first-child {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: darkmagenta
+}
+
+#Options>div.options.range>div:first-child {
+    float: left
+}
+
+#Options>div.options.range>div:nth-child(2) {
+    float: right;
+    margin-right: 1em;
+    font-size: 16px
+}
+
+#Options input[type=range] {
+    width: 100%
+}
+
+#Options>div.options.checkbox {
+    overflow: hidden
+}
+
+#Options>div.options.checkbox>div:first-child {
+    display: inline-block;
+    vertical-align: middle
+}
+
+#Options>div.options.checkbox>div:nth-child(2) {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 2px;
+    margin-left: .5em
+}
+
+div.segmented-bar {
+    width: 100%;
+    background-color: white
+}
+
+div.segmented-bar>div {
+    padding: 4px 0;
+    cursor: pointer;
+    color: darkmagenta;
+    text-align: center;
+    border: 2px solid darkmagenta;
+    border-left: none;
+    display: inline-block;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none
+}
+
+div.segmented-bar>div:first-child {
+    border-left: 2px solid darkmagenta;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px
+}
+
+div.segmented-bar>div:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px
+}
+
+div.segmented-bar>div.selected {
+    background-color: darkmagenta;
+    color: white
+}
+
+div.entry {
+    margin: 0;
+    width: 100%
+}
+
+div.output {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 20px;
+    word-wrap: break-word;
+    overflow-x: auto;
+    overflow-y: hidden
+}
+
+table.text {
+    border-spacing: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    table-layout: fixed
+}
+
+table.text td,div.entry textarea {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+    background-color: transparent;
+    color: black;
+    border: 0;
+    outline: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word
+}
+
+div.single {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word
+}
+
+div.multi {
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word
+}
+
+div.textarea,div.multi-textarea {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: transparent;
+    color: black;
+    border: 0;
+    outline: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word
+}
+
+div.single,div.multi {
+    color: transparent
+}
+
+table.text tr td:first-child {
+    min-width: 30px;
+    width: 30px;
+    text-align: center;
+    vertical-align: top
+}
+
+table.text tr td:nth-child(2) {
+    padding-left: 4px;
+    color: transparent
+}
+
+div.textarea,div.multi-textarea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%
+}
+
+div.entry textarea {
+    height: 100%;
+    resize: none
+}
+
+div.single {
+    position: relative;
+    top: 0;
+    left: 0;
+    pointer-events: none
+}
+
+div.multi {
+    position: relative;
+    top: 0;
+    left: 0;
+    padding: 0;
+    pointer-events: none
+}
+
+span.c3,table.text td:nth-child(2).c3 {
+    color: royalblue
+}
+
+span.c4,table.text td:nth-child(2).c4,div.single.c4 {
+    color: green
+}
+
+span.c5,table.text td:nth-child(2).c5 {
+    color: deeppink
+}
+
+span.c6 {
+    color: gray
+}
+
+span.ch {
+    background-color: rgba(255,255,0,0.5)
+}
+
+table.text td:nth-child(2).error {
+    background-color: rgba(255,0,0,0.25)
+}
+
+div.controls {
+    vertical-align: top
+}
+
+div.controls>div {
+    padding: 6px 6px 2px;
+    margin: 8px .5em .3em 0;
+    background-color: #eee;
+    border-radius: 6px;
+    border: #555 2px solid;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: bold;
+    vertical-align: top;
+    text-align: left
+}
+
+div.controls>div.button {
+    padding: 6px
+}
+
+div.controls>div.button>div {
+    display: inline-block
+}
+
+div.controls>div.button>div:nth-child(2) {
+    margin-left: 6px
+}
+
+div.controls>div.checkbox {
+    padding: 6px
+}
+
+div.controls>div.checkbox>div {
+    display: inline-block
+}
+
+div.controls>div.checkbox>div:nth-child(2) {
+    margin-left: 6px
+}
+
+div.controls>div.animate {
+    padding: 6px
+}
+
+div.controls>div.animate>div:first-child {
+    font-weight: normal;
+    margin-bottom: 2px
+}
+
+div.controls>div.textbox {
+    padding: 6px
+}
+
+div.controls>div.textbox>div {
+    display: inline-block
+}
+
+div.controls>div.textbox>div:nth-child(2) {
+    margin-left: 2px
+}
+
+div.controls>div.select {
+    padding: 6px
+}
+
+div.controls>div.select>div {
+    display: inline-block
+}
+
+div.controls>div.select>div:nth-child(2) {
+    margin-left: 2px
+}
+
+div.warning {
+    font-style: italic;
+    margin-bottom: 4px
+}
+
+div.trace {
+    font-size: 15px;
+    background-color: #eee;
+    border: 2px solid #555;
+    border-radius: 6px;
+    margin-top: .3em
+}
+
+div.trace th {
+    text-align: left
+}
+
+div.trace td {
+    padding: 3px
+}
+
+div.object {
+    display: inline-block;
+    vertical-align: top
+}
+
+ul.object {
+    margin: 4px 4px 20px;
+    font-size: 13px;
+    font-weight: normal
+}
+
+ul.object li {
+    font-weight: normal
+}
+
+button.object {
+    font-size: 18px;
+    border-radius: 6px;
+    background: #888;
+    cursor: pointer;
+    color: white;
+    border: 0;
+    height: 1.5em
+}
+
+button.object:active {
+    background: black
+}
+
+button.object>div {
+    font-size: 13px;
+    background-color: white;
+    margin: 3px 4px 0 6px;
+    border-radius: 3px;
+    padding: 1px 2px 0;
+    color: #888;
+    display: inline-block;
+    vertical-align: top
+}
+
+div.plot {
+    position: relative;
+    width: auto
+}
+
+svg.plot,canvas.plot {
+    border: #555 2px solid;
+    border-radius: 6px;
+    overflow: hidden;
+    display: block;
+    cursor: move;
+    cursor: -moz-grab;
+    cursor: -webkit-grab
+}
+
+svg.plot:active,canvas.plot:active {
+    cursor: move;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing
+}
+
+svg.plot {
+    background-color: white;
+    direction: ltr;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none
+}
+
+canvas.plot {
+    background-color: #eee
+}
+
+div.map {
+    width: 100%;
+    height: 200px;
+    margin-top: .3em;
+    border: #555 2px solid;
+    border-radius: 6px;
+    overflow: hidden
+}
+
+div.layout {
+    line-height: normal
+}
+
+svg:not(:root) {
+    overflow: hidden
+}
+
+svg.plot path {
+    stroke: darkmagenta;
+    stroke-width: 2;
+    fill: none;
+    stroke-linejoin: round
+}
+
+svg.plot path.Plot {
+    stroke-linecap: square
+}
+
+svg.plot path.xy {
+    vector-effect: non-scaling-stroke
+}
+
+svg.plot path.VectorPlot {
+    stroke-width: 1;
+    fill: darkmagenta
+}
+
+svg.plot path.x,svg.plot path.y {
+    stroke-width: 1;
+    stroke: #eee;
+    fill: none
+}
+
+svg.plot path.tx,svg.plot path.ty,svg.plot path.ox,svg.plot path.oy {
+    stroke-width: 1;
+    stroke: #888;
+    fill: none
+}
+
+svg.plot rect.line {
+    fill: #eee
+}
+
+svg.plot rect.ox,svg.plot rect.oy,svg.plot rect.tick {
+    fill: #888
+}
+
+svg.plot ellipse {
+    stroke: black;
+    stroke-width: 1;
+    fill: darkmagenta
+}
+
+svg.plot line {
+    stroke: darkmagenta
+}
+
+svg.plot polygon,svg.plot g {
+    fill: darkmagenta
+}
+
+svg.plot text {
+    font-size: 11px
+}
+
+svg.plot text.calculations {
+    font-size: 13px
+}
+
+svg.plot text.calculations tspan.outline {
+    font-size: 13px;
+    fill: white;
+    stroke: white;
+    stroke-width: 6px
+}
+
+svg.plot text.x tspan {
+    text-anchor: middle
+}
+
+svg.plot text.y tspan {
+    dominant-baseline: middle
+}
+
+svg.parenthesis ellipse {
+    stroke: black;
+    stroke-width: 2;
+    fill: none
+}
+
+g.trace-text>g>text {
+    font-size: 14px
+}
+
+g.trace-text>g>text>tspan:first-child {
+    font-style: italic
+}
+
+g.trace-text>g>text>tspan:nth-child(2) {
+    font-weight: bold
+}
+
+g.trace-text>g>text.outline {
+    stroke: white;
+    stroke-width: 4px;
+    stroke-opacity: .9
+}
+
+g.trace-line line {
+    stroke: rgba(0,0,0,0.3);
+    stroke-width: 1px;
+    stroke-dasharray: 1,1
+}
+
+#fullscreen-entry {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0s .5s,opacity .5s;
+    pointer-events: none
+}
+
+#fullscreen-entry.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .5s;
+    pointer-events: auto
+}
+
+#fullscreen-entry div.entry {
+    padding: 0;
+    margin: 0
+}
+
+#fullscreen-entry div.input {
+    display: none
+}
+
+#fullscreen-entry div.output {
+    margin: 0;
+    padding: 0
+}
+
+#fullscreen-entry div.output>div.plot {
+    margin: 0;
+    padding: 0
+}
+
+#fullscreen-entry div.output>div.controls {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2em;
+    text-align: center;
+    margin: 0 auto
+}
+
+#fullscreen-entry div.output>div.plot>svg.plot,#fullscreen-entry div.output>div.plot>canvas.plot {
+    border: 0;
+    border-radius: 0;
+    max-width: none
+}
+
+#fullscreen-entry div.output>div.plot>svg.plot>g.trace-text>g>text {
+    font-size: 18px
+}
+
+div.decimal {
+    font-style: italic;
+    font-size: 14px;
+    color: gray;
+    margin-top: 4px
+}
+
+div.error {
+    font-size: 17px;
+    color: red;
+    font-style: italic
+}
+
+div.message {
+    font-size: 13px;
+    font-style: italic;
+    vertical-align: top
+}
+
+div.message>span {
+    font-weight: bold
+}
+
+.MATH01 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0 1px;
+    border: 0;
+    line-height: 1em
+}
+
+.MATH02,.MATH03 {
+    text-align: center;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0
+}
+
+.MATH02 {
+    padding-bottom: .25em
+}
+
+.MATH03 {
+    box-shadow: inset 0 1px 0 rgba(0,0,0,1);
+    padding-top: .25em
+}
+
+.MATH04 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0 1px;
+    border: 0;
+    line-height: .5em
+}
+
+.MATH05 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    line-height: 1em;
+    white-space: nowrap
+}
+
+.MATH06 {
+    display: inline-block;
+    width: 4px;
+    border-left: black solid 2px;
+    border-top: black solid 2px;
+    border-bottom: black solid 2px
+}
+
+.MATH07 {
+    display: inline-block;
+    width: 4px;
+    border-right: black solid 2px;
+    border-top: black solid 2px;
+    border-bottom: black solid 2px
+}
+
+.MATH08,.MATH09 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0
+}
+
+.MATH10 {
+    display: block;
+    line-height: 1em
+}
+
+.MATH11 {
+    stroke-width: 2;
+    fill: none;
+    stroke: black
+}
+
+.MATH12 {
+    stroke: white;
+    stroke-width: 2;
+    fill: none
+}
+
+.MATH13 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0
+}
+
+.MATH14 {
+    width: 16px;
+    display: block;
+    line-height: 1em
+}
+
+.MATH15 {
+    stroke: black;
+    stroke-width: 1px;
+    fill: none
+}
+
+.MATH16 {
+    stroke: black;
+    stroke-width: 2px;
+    fill: none
+}
+
+.MATH17 {
+    font-family: times;
+    padding-right: 1.5px
+}
+
+.MATH18 {
+    box-shadow: 0 -1px 0 white,0 -2px 0 black;
+    display: inline-block
+}
+
+.MATH19 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: .2em 0 0;
+    border: 0;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,1)
+}
+
+.MATH20 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    line-height: 1em
+}
+
+.MATH21 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 1em;
+    line-height: 1em
+}
+
+.MATH22 {
+    font-style: italic;
+    font-family: times
+}
+
+.MATH23 {
+    font-family: times
+}
+
+.MATH24 {
+    font-family: times;
+    font-weight: bold
+}
+
+.MATH25,.MATH26 {
+    font-weight: bold
+}
+
+.MATH28 {
+    font-style: italic
+}
+
+div.layout .MATH28 {
+    color: inherit
+}
+
+.MATH29 {
+    border-spacing: 0;
+    box-shadow: inset -1px -1px 0 rgba(0,0,0,1)
+}
+
+.MATH30 {
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,1);
+    padding: .4em;
+    margin: 0;
+    text-align: center
+}
+
+.MATH31 {
+    vertical-align: top;
+    display: inline-block;
+    margin: 0;
+    padding: 0 4px 0 0;
+    border: 0
+}
+
+.MATH33 {
+    font-size: 13px;
+    font-weight: bold
+}
+
+.MATH34 {
+    line-height: 1.2em
+}
+
+.MATH35 {
+    padding-top: .1em;
+    line-height: 1em
+}
+
+div.computing-image {
+    background-image: url(data:image/gif;base64,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);
+    border-radius: 4px;
+    background-size: contain;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: -1px
+}
+
+div.value>div.computing-image {
+    background-blend-mode: multiply;
+    background-color: #eee;
+    margin-top: 0
+}
+
+span.computing-text {
+    color: #aaa;
+    font-size: 13px;
+    display: inline-block;
+    vertical-align: top
+}
+
+body.MathStudio div.entry {
+    padding: 8px
+}
+
+body.MathStudio div.input {
+    position: relative;
+    border-radius: 6px;
+    background-color: #f6f6f6;
+    border: 2px solid #777;
+    overflow: hidden
+}
+
+body.MathStudio div.entry-button {
+    display: none
+}
+
+body.MathStudio div.single,body.MathStudio div.textarea {
+    padding: 4px
+}
+
+body.MathStudio div.multi-textarea {
+    padding: 4px;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 34px
+}
+
+body.MathStudio table.text tr td:first-child {
+    background-color: #555;
+    color: white
+}
+
+body.MathStudio table.text:first-child tr:first-child td {
+    padding-top: .3em
+}
+
+body.MathStudio table.text:last-child tr:last-child td {
+    padding-bottom: .3em
+}
+
+body.MathStudio div.output:not(.fullscreen)>div.plot {
+    margin-top: 8px
+}
+
+body.MathStudio div.expression {
+    padding: 4px 0 4px 5px;
+    line-height: 1em
+}
+
+div.expression div.equals {
+    display: none
+}
+
+body.MathStudio div.message {
+    margin-top: .3em
+}
+
+body.MathStudio div.image {
+    margin-top: .5em
+}
+
+#MathStudio svg.plot,#MathStudio canvas.plot {
+    max-width: calc(100% - 4px)
+}
+
+#MathStudio div.layout svg.plot,#MathStudio div.layout canvas.plot {
+    max-width: none
+}
+
+div.plot-touch-controls {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    text-align: center;
+    margin: 0 auto;
+    display: none
+}
+
+div.plot-touch-controls table td:nth-child(1),div.plot-touch-controls table td:nth-child(3) {
+    min-width: 72px;
+    text-align: center
+}
+
+div.plot-touch-controls table td:nth-child(2) {
+    width: 100%
+}
+
+#fullscreen-entry div.plot-touch-controls {
+    display: block;
+    top: 4px
+}
+
+div.plot-touch-controls div.segmented-bar {
+    width: 160px;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px
+}
+
+#fullscreen-entry div.plot-controls {
+    display: none
+}
+
+div.plot-controls>button {
+    cursor: pointer;
+    border: 1px solid #aaa;
+    background-color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #aaa;
+    width: 50px;
+    margin-right: 8px;
+    margin-top: 6px;
+    padding: 4px 0;
+    text-align: center
+}
+
+div.plot-controls>button.selected {
+    border-color: darkmagenta;
+    color: darkmagenta
+}

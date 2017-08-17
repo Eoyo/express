@@ -1,0 +1,184 @@
+@charset "utf-8";
+@import "image.sass";
+@import "tool/color.sass";
+@import "tool/layout";
+
+*{
+    box-sizing: border-box;
+}
+//Animation
+@mixin Animation {
+    $animation-name: unique-id();
+
+    animation-name: $animation-name;
+
+    @keyframes #{$animation-name} {
+        @content;
+    }
+}
+@mixin Move {
+    animation: 2s ease both;
+
+    @include Animation {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(200px);
+        }
+    }
+}
+@mixin Double($className){
+    #{$className+0}{
+        @content;
+    }
+    #{$className+1}{
+        @content;
+    }
+}
+@mixin Center($per){
+    width: $per;
+    @if($per*0 != 0%){
+        margin-left: calc((100% - #{$per})/2);
+    }@else{
+        margin-left: (100% - $per)/2;
+    }
+}
+//Table layout
+@mixin Divide($arr,$heightPadding,$widthPadding){
+    $sum : 0;
+    $len: length($arr);
+    $dou : $widthPadding*2;
+    @for $i from 1 through $len{
+        $sum : $sum + nth($arr,$i);
+    }
+    @for $i from 1 through $len{
+        $per : nth($arr,$i)/$sum;
+        >:nth-child(#{$i}){
+            @if($widthPadding > 0px){
+                width: calc(#{percentage( $per )} - #{$dou});
+                height: calc(100% - #{$widthPadding*2});
+                margin : $heightPadding $widthPadding;
+            }@else{
+                width:percentage( $per );
+            }
+            display: inline-block;
+        }
+    }
+}
+
+@mixin Table($arr,$widthPadding,$heightPadding){
+    @content;
+    .tr {
+        width: 100%;
+        @include Divide($arr,$widthPadding,$heightPadding);
+    }
+
+    .td {
+        display: inline-block;
+    }
+}
+
+@mixin Flex($arr){
+    @if($arr == center){
+        @extend %Flex-Center;
+    }@else{
+        @extend %Flex-Row;
+        $len: length($arr);
+        @for $i from 1 through $len{
+            :nth-child(#{$i}){
+                flex-grow: nth($arr,$i);
+            }
+        }
+    }
+}
+@function myGridSet($w,$h){
+    $len: length($w);
+    @if($len > 3){
+        $len:3;
+    }
+    @for $i from 1 through $len{
+        $gridWidth:set-nth($gridWidth , $i , nth($w,$i));
+    }
+    $len: length($h);
+    @if($len > 3){
+        $len:3;
+    }
+    @for $i from 1 through $len{
+        $gridHeight:set-nth($gridHeight , $i , nth($w,$i));
+    }
+}
+
+@mixin debug($str,$one){
+    /*#{$str}:   #{$one}*/
+}
+
+@mixin Grid-wh($arr,$gw,$gh){
+    $hLen: length($arr);
+    $wLen: length(nth($arr,1));
+    @include debug("$hLen",$hLen);
+    @include debug("$wLen",$wLen);
+    $Gleft:(0,0,0, 0,0,0, 0,0,0);
+    $Gtop :(0,0,0, 0,0,0, 0,0,0);
+    $Gwidth:(0,0,0, 0,0,0, 0,0,0);
+    $Gheight :(0,0,0, 0,0,0, 0,0,0);
+    $all:0;
+    @for $i from 1 through $wLen{
+        @for $j from 1 through $hLen{
+            $is:nth(nth($arr,$j),$i);
+            @if($is>$all){
+                $all:$is;
+            }
+            @if(nth($Gleft,$is) < 1){
+                $Gleft:set-nth( $Gleft,$is,$i);
+            }
+            @if(nth($Gtop,$is) < 1){
+                $Gtop:set-nth( $Gtop,$is, $j);
+            }
+            @if(nth($Gwidth,$is) < $i){
+                $Gwidth:set-nth( $Gwidth,$is, $i);
+            }
+            @if(nth($Gheight,$is) < $j){
+                $Gheight:set-nth( $Gheight,$is, $j);
+            }
+        }
+    }
+    $sumW:0;
+    $sumH:0;
+    $gridWidth: $gw;
+    $gridHeight: $gh;
+    @for $i from 1 through $wLen{
+        $cur: nth($gridWidth,$i);
+        $sumW: $sumW + $cur;
+        $gridWidth: set-nth($gridWidth,$i,$sumW);
+    }
+    @for $i from 1 through $hLen{
+        $cur: nth($gridHeight,$i);
+        $sumH: $sumH + $cur;
+        $gridHeight: set-nth($gridHeight,$i,$sumH);
+    }
+    @for $i from 1 through $all{
+        $offsetW: nth($Gleft,$i) - 1;
+        $offsetH: nth($Gtop,$i) - 1;
+        $left: 0;
+        $top: 0;
+        @if($offsetW>0){
+            $left: percentage(nth($gridWidth,$offsetW)/$sumW);
+        }
+        @if ($offsetH>0){
+            $top: percentage(nth($gridHeight,$offsetH)/$sumH);
+        }
+        >:nth-child(#{$i}){
+            left:$left;
+            top:$top;
+            position: absolute;
+        }
+    }
+    @include debug("$Gtop",$Gtop);
+    @include debug("$sumH",$sumH);
+    position: relative;
+}
+@mixin Grid($arr){
+    @include Grid-wh($arr,(1,1,1) ,(1,1,1) );
+}

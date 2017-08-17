@@ -1,0 +1,157 @@
+.row .skillsUL li {
+  list-style: none; }
+  .row .skillsUL li::before {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    content: "";
+    margin: 11px 6px 4px 6px;
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    background: black; }
+
+* ::selection {
+  text-shadow: 1px 1px 4px gray;
+  background: #00aab2;
+  color: #fff; }
+
+* {
+  box-sizing: border-box; }
+
+.indent, small, .row big {
+  padding-left: 15px; }
+
+small {
+  color: gray; }
+
+.resume {
+  background: none;
+  width: 750px;
+  margin-left: calc((100% - 750px)/2); }
+  .resume > * {
+    padding-bottom: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 8px -4px gray;
+    border-bottom: 1px solid #eee; }
+
+.img {
+  width: 123px;
+  height: 123px;
+  background-image: url('../images/lium.jpg');
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 100%;
+  border: 1px solid gray; }
+
+.head .name {
+  font-size: 40px;
+  padding: 10px 0 0 15px; }
+
+.head .aim {
+  font-size: 20px;
+  padding: 0 30px; }
+
+.head .contact {
+  /*$hLen:   1*/
+  /*$wLen:   2*/
+  /*$Gtop:   1, 1, 0, 0, 0, 0, 0, 0, 0*/
+  /*$sumH:   1*/
+  position: relative;
+  height: 20px;
+  width: 70%;
+  margin-left: 30px; }
+  .head .contact > :nth-child(1) {
+    left: 0;
+    top: 0;
+    position: absolute; }
+  .head .contact > :nth-child(2) {
+    left: 60%;
+    top: 0;
+    position: absolute; }
+
+.head .message {
+  /*$hLen:   2*/
+  /*$wLen:   2*/
+  /*$Gtop:   1, 2, 1, 0, 0, 0, 0, 0, 0*/
+  /*$sumH:   5*/
+  position: relative;
+  height: 130px; }
+  .head .message > :nth-child(1) {
+    left: 0;
+    top: 0;
+    position: absolute; }
+  .head .message > :nth-child(2) {
+    left: 0;
+    top: 60%;
+    position: absolute; }
+  .head .message > :nth-child(3) {
+    left: 60%;
+    top: 0;
+    position: absolute; }
+  .head .message .img {
+    margin-left: 123px; }
+
+.row {
+  padding-left: 15px;
+  width: 100%;
+  display: table; }
+  .row > * {
+    display: table-cell; }
+  .row > h3 {
+    width: 80px;
+    text-align: center; }
+  .row > .content {
+    padding-left: 15px; }
+  .row .skillsUL li {
+    line-height: 17px; }
+  .row .skillsUL > :nth-child(1)::before {
+    background: #f30; }
+  .row .skillsUL > :nth-child(2)::before {
+    background: #3ba; }
+  .row .skillsUL > :nth-child(3)::before {
+    background: #fc1; }
+  .row .skillsUL > :nth-child(4)::before {
+    background: #d0f; }
+  .row .skillsDiv {
+    /*$hLen:   1*/
+    /*$wLen:   2*/
+    /*$Gtop:   1, 1, 0, 0, 0, 0, 0, 0, 0*/
+    /*$sumH:   1*/
+    position: relative;
+    height: 145px; }
+    .row .skillsDiv > :nth-child(1) {
+      left: 0;
+      top: 0;
+      position: absolute; }
+    .row .skillsDiv > :nth-child(2) {
+      left: 50%;
+      top: 0;
+      position: absolute; }
+  .row .content .head {
+    font-size: 20px;
+    font-weight: 600;
+    height: 28px;
+    margin: 5px 0; }
+  .row .content p {
+    text-indent: 20px;
+    width: 500px;
+    margin: 5px 0; }
+  .row .content .oneProj {
+    padding-bottom: 15px; }
+
+.github {
+  color: gray;
+  margin-bottom: 15px; }
+  .github a {
+    appearance: none;
+    color: #33d;
+    padding: 0px 10px; }
+
+foot {
+  text-align: center; }
+  foot .desc {
+    margin: 10px 0px;
+    color: #eee; }

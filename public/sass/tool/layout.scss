@@ -1,0 +1,42 @@
+%awsomeSelection{
+    ::selection {
+        text-shadow: 1px 1px 4px gray;
+        background: #00aab2;
+        color: #fff;
+    }
+}
+
+//Flex Center Example 
+%Flex-Center{
+    display : flex;
+    flex-flow : row wrap;
+    justify-content: center; //for horizontal
+    align-items: center; //for vertical
+    align-content: space-around;
+}
+%Flex-Row{
+    display : flex;
+    flex-flow : row wrap;
+}
+
+//item Example 
+%Flex-item {
+    order : 123;
+    flex-grow : 2;
+    flex-shrink : 3;
+    flex-basis : auto;
+    flex: 2 3 auto;
+    align-self: flex-end;
+}
+
+//Grid layout example
+%Grid{
+    grid-template-columns: 50px 100px repeat(2,1fr);
+    grid-template-rows:50px 100px 200px;
+    grid-gap: 10px 10px;
+    display: grid;
+    :nth-child(1){
+        grid-column-start: 1;
+        grid-column-end: 5;
+    }
+}
