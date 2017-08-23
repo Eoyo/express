@@ -772,9 +772,9 @@ var svg = {
                 , sin = Math.sin
                 , vi = 0
                 , xi = 2;
-            if(len%2){
+            if (len % 2) {
                 xi = 2;
-            }else{
+            } else {
                 xi = 3;
             }
             for (var i = 0; i < len; i++) {
@@ -805,6 +805,7 @@ var svg = {
 }
 
 
+
 var Hif = {
     creatEle(prop) {
         var doc;
@@ -817,10 +818,10 @@ var Hif = {
         }
         if (prop.id)
             // doc.id = prop.id;
-            doc.setAttribute("id",prop.id);
+            doc.setAttribute("id", prop.id);
         if (prop.className)
             // doc.className = prop.className;
-            doc.setAttribute("class",prop.className);
+            doc.setAttribute("class", prop.className);
         //add element attrs
         var len = prop.attr.length;
         for (let x = 0; x < len; x++) {
@@ -1086,7 +1087,7 @@ var Hif = {
                                                 });
                                             }
                                             else {
-                                                Hif.setVal(classCopy, some, classObjhere[some], function (e) {
+                                                Hif.setOnepVal(classCopy, some, classObjhere[some], function (e) {
                                                     classCopy[some] = e.data;
                                                     js.Sp(classCopy).notify("setKey");
                                                 });
@@ -1162,9 +1163,52 @@ var Hif = {
             return str;
         }
         return ele.tagName.toLowerCase();
-    },
-    setValIndex: "",
-    setVal(ele, key, value, cb) {
+    }
+    , setValIndex: ""
+    , setOnepVal(ele, key, value, cb) {
+        switch (true) {
+            case value instanceof DataLeaf:
+                //all listen to gsObj;
+                //but listener should be updated nextTick;
+                var gotValue = value.get();
+                ele[key] = gotValue;
+                js.Sp(ele, key).listenTo(value, "set", cb);
+                return;
+            case value instanceof ArrayData:
+                function setArrayDom() {
+                    ele.innerHTML = "";
+                    if (value.__map_domList__ == undefined) {
+                        ts.error("ArrayType");
+                    }
+                    else {
+                        value.__map_domList__.forEach(function (a) {
+                            var len = a.html.length;
+                            for (var i = 0; i < len; i++) {
+                                ele.appendChild(a.html[i]);
+                            }
+                        });
+                    }
+                }
+                js.Sp(value).on("domCreated", setArrayDom);
+                setArrayDom();
+                return;
+            case value instanceof Array:
+                var i = Hif.setValIndex;
+                if (i !== "") {
+                    Hif.setOnepVal(ele, key, value[i]);
+                }
+                return;
+            case value && (value.set instanceof Function):
+                js.Sp(ele, key).listenTo(value, "set", function setValue(e) {
+                    ele[key] = e.data;
+                    js.Sp(ele).notify("setKey", { keyName: key });
+                });
+                break;
+            default:
+                ele[key] = value;
+        }
+    }
+    , setVal(ele, key, value, cb) {
         switch (true) {
             case value instanceof DataLeaf:
                 //all listen to gsObj;
@@ -1172,7 +1216,7 @@ var Hif = {
                 var gotValue = value.get();
                 switch (key) {
                     case "show":
-                        js.Sp(ele, key).listenTo(value, "set", function setShow(e) {
+                        function setShow(e) {
                             var gotV = e.data;
                             if (gotV) {
                                 ele.style.visibility = "visible";
@@ -1180,7 +1224,10 @@ var Hif = {
                             else {
                                 ele.style.visibility = "hidden";
                             }
-                        });
+                        }
+                        js.Sp(ele, key).listenTo(value, "set", setShow);
+                        //初始化show值
+                        setShow({ data: gotValue })
                         break;
                     default:
                         ele[key] = gotValue;
@@ -1552,6 +1599,14 @@ class Data {
                 }
             };
         }
+        var vmx = vm[x];
+        vmx.assign = function (arr) {
+            var len = vmx.length > arr.length ? arr.length : vmx.length;
+            for (var i = 0; i < len; i++) {
+                vmx[i].set(arr[i]);
+            }
+        }
+        vmx.length = dt[x].length;
         return vm[x];
     }
     static reReadArray(dt, vm, x, id) {
@@ -1836,6 +1891,59 @@ function createEle(eleName, str) {
 Vir.strong = function (str) {
     return createEle("strong", str);
 }
+Vir.addError = function (str, code) {
+    error.addError(str, code);
+    console.error(code, str);
+}
+
+var error = {
+    hasVirWrong: false
+    , shower: null
+    , dt: new Data({
+        show: false
+        , wronglist: []
+    })
+    , showAlert() {
+        error.dt.show.set(true);
+    }
+    , addError(str, code) {
+        error.createAlert();
+        error.dt.wronglist.push({
+            str,
+            code
+        })
+        error.showAlert();
+    }
+    , createAlert() {
+        if (error.shower) return;
+        error.shower = Vir({
+            "#virError": {
+                ".icon div .wrong": ""
+                , ".content": {
+                    ".message ::message": {
+                        $: "此页有javaScript丢失,可前往控制台查看:ctrl+shif+I"
+                    }
+                    , "ol": For(error.dt.wronglist, (onep) => {
+                        return {
+                            "li": {
+                                args: {
+                                    className: "wrongAt" + onep.code.get()
+                                }
+                                , $: onep.str.get() + "," + ("status code is:" + onep.code.get() + "</div>").small()
+                            }
+                        }
+                    })
+                }
+                , args: {
+                    class: {
+                        show: error.dt.show
+                    }
+                }
+            }
+        })
+    }
+}
+
 function For(from, cb) {
     switch (true) {
         case Array.isArray(from):
@@ -1867,7 +1975,13 @@ function For(from, cb) {
     return from;
 }
 
-function ajax(op) {
+function ajax(op = {
+    type: "GET"
+    , async: true
+    , url: ""
+    , success(data = "") { }
+    , error(data = "",xhr){}
+}) {
     var xhr = new XMLHttpRequest();
     var queryStr = "";
     if (op.type == "GET") {
@@ -1880,16 +1994,65 @@ function ajax(op) {
         }
         op.url += queryStr;
     }
-    xhr.open(op.type, op.url, true);
-    xhr.send(op.data);
+    switch (op.type) {
+        case "GET":
+            xhr.open(op.type, op.url, op.async);
+            xhr.send();
+            break;
+        case "POST":
+            xhr.open(op.type, op.url, op.async);
+            xhr.send(op.data);
+            break;
+
+    }
+    if (op.async == undefined) op.async = true;
     xhr.onreadystatechange = function (e) {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            op.success && op.success(JSON.parse(e.target.response));
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                op.success && op.success(e.target.response);
+            }else{
+                op.error && op.error(e.target.response,xhr);
+            }
         }
     }
 }
 
-
+function virRequire(op = {
+    js: [
+        "test.js"
+    ]
+    , cssDir: "http://localhost:3000/css/"
+    , css: [
+        "base.css"
+    ]
+}){
+    var head = document.head;
+    if (op.css) {
+        op.css.forEach((v)=>{
+            var style = document.createElement("style");
+            ajax({
+                async:true
+                ,type:"GET"
+                ,url:op.cssDir + v
+                ,success(data){
+                    style.innerHTML = data;
+                    head.appendChild(style);
+                    console.log(ok);
+                }
+                ,error(data,xhr){
+                    console.error(xhr,data);
+                }
+            })
+        })
+    }
+    if(op.js){
+        op.js.forEach((v,i)=>{
+            var jsc = document.createElement("script");
+            jsc.src = v;
+            head.appendChild(jsc);
+        })
+    }
+}
 // someThingWrong
 window.onerror = function (mes) {
     document.write(`
@@ -1905,4 +2068,16 @@ window.onerror = function (mes) {
  * 
  * 主动的提交内容的优化搜索
  * 
+ */
+/**
+ * 2017 8 25 
+ * 修复了bug : 
+ *  class 离子化
+ * 添加功能:
+ *  virjs file 加载的错误提示
+ *  data 对象的数组 assign
+ *  virRequire 功能
+ * 待添加的功能
+ *  智能的set
+ *  
  */

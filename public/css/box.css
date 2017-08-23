@@ -129,7 +129,7 @@
   display: none;
   position: fixed;
   top: 10px;
-  right: 200px;
+  left: 200px;
   opacity: 0;
   background: white;
   box-shadow: 0 3px 8px -1px gray;
@@ -141,9 +141,9 @@
   #message.active0 {
     display: block;
     animation: 4s forwards;
-    animation-name: u7f4f6113; }
+    animation-name: u7f70f2aa; }
 
-@keyframes u7f4f6113 {
+@keyframes u7f70f2aa {
   0% {
     opacity: 0; }
   20% {
@@ -156,9 +156,9 @@
   #message.active1 {
     display: block;
     animation: 4s forwards;
-    animation-name: u78a9ceb9; }
+    animation-name: u417e145a; }
 
-@keyframes u78a9ceb9 {
+@keyframes u417e145a {
   0% {
     opacity: 0; }
   20% {

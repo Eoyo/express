@@ -31,10 +31,23 @@ small {
   width: 750px;
   margin-left: calc((100% - 750px)/2); }
   .resume > * {
-    padding-bottom: 30px;
+    padding-bottom: 15px;
     margin-bottom: 20px;
     box-shadow: 0px 2px 8px -4px gray;
     border-bottom: 1px solid #eee; }
+
+.title {
+  display: table;
+  width: 100%; }
+  .title > div {
+    display: table-cell;
+    padding: 5px; }
+  .title .main {
+    font-size: 35px;
+    text-align: right; }
+  .title .english {
+    font-size: 25px;
+    vertical-align: bottom; }
 
 .img {
   width: 123px;
@@ -144,6 +157,8 @@ small {
     margin: 5px 0; }
   .row .content .oneProj {
     padding-bottom: 15px; }
+  .row .content svg {
+    fill: gray; }
 
 .github {
   color: gray;

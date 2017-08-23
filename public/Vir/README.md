@@ -1,6 +1,6 @@
 # Vir.js
 
-## 基本写法
+## 一.基本写法
 >index.html
 ```html
 <html>
@@ -97,6 +97,27 @@ test.threeChild.forEach((v)=>{
 </div>
 ```
 
+###6.1 分述,(解构)
+>如果js代码为:
+```js
+".parent > 3* .son":{
+    $:["son1","son2","son3"]
+    args:{
+        title:"son"
+    }
+    ///绑定在最后生成的元素上;即为.son上;
+}
+```
+分述在节点值为数组时触发;否则为复述
+>生成html为:
+```html
+<div> 
+    <div title = "son">son1</div>
+    <div title = "son">son2</div>
+    <div title = "son">son3</div>
+</div>
+```
+
 ### 7.标记 :`"Hidden; .parent"`
 同级的属性名不可以一样,否则会覆盖之前的;
 so,使用 "???; ",在真的被解析字符前面加标记;
@@ -120,7 +141,7 @@ so,使用 "???; ",在真的被解析字符前面加标记;
 >逗号这分割符你随意也可以空格等,别和关键字冲突就可以;
 >该黏在一起的,要黏在一起如:"#id" 不可以写成"# id"
 
-## 特殊属性
+## 二.特殊属性
 目前的有: `$ data style args on`共五个
 ### 1.$
 简单的直接绑定的innerHTML; 如果只想绑定到innerHTML,可以简写;如下为两种写法:
@@ -155,8 +176,9 @@ args:{
 特殊的有:
 ```js
 on :{
-    "created"(ele,index){
+    "created"(ele,index){//( 这个elememt ,第几个 )
         //当dom element 被创建后执行;
+        //通常在nexttick 回调
     }
 
     keydown:{
@@ -166,3 +188,6 @@ on :{
     }
 }
 ```
+>keydown 中可以使用的keyname 详见Vir.js代码开头的keyCode对象;
+
+##三.双向绑定

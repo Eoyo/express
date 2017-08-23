@@ -1,2 +1,2 @@
-start powershell -NoExit node app.js
+start powershell -NoExit node bin/www
 start powershell -NoExit gulp

@@ -1,0 +1,10 @@
+#virError {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  border: 1px solid gray;
+  width: 500px;
+  background: rgba(224, 201, 201, 0.8); }
+
+.wrongAt404 {
+  color: red; }

@@ -1,0 +1,11 @@
+.blur{
+    filter: blur(3px);
+    opacity: 0.6;
+    transform: translateZ(-100px);
+    transition: all .5s;
+    &:hover{
+        filter: blur(2px);
+        opacity: 1;
+        transform: translateZ(0px);
+    }
+}

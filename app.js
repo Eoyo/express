@@ -9,6 +9,18 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+var reg = {
+  virjs:/.*\.vir$/
+  ,getName : /(\w*)\.vir$/
+  ,jsFile: /(\w*)\.js$/
+  ,getJsFile(str){
+    var onep = reg.jsFile.exec(str);
+    if(onep) return onep[1];
+    else{
+      return onep;
+    }
+  }
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,15 +32,23 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-var wCompute = require("./compute");
-var vk = wCompute.getMessage({
-  data:{
-    input:"x+1"
-    ,id :0
-    ,compute:"text"
-  }
+app.use(reg.virjs,function(req,res,next){
+  console.log("get js");
+  var name = reg.getName.exec(req.originalUrl)[1];
+  console.log(name);
+  res.send(model.html({
+    js:name + ".js"
+  }));
 })
+app.use(express.static(path.join(__dirname, 'public')));
+// var wCompute = require("./compute");
+// var vk = wCompute.getMessage({
+//   data:{
+//     input:"x+1"
+//     ,id :0
+//     ,compute:"text"
+//   }
+// })
 var Url = {
   read(str=""){
     var start = str.indexOf('?');
@@ -43,21 +63,47 @@ var Url = {
     return obj;
   }
 }
+var model = {
+  js:[]
+  ,css:[]
+  ,vir:"../Vir/Vir.js"
+  ,html(op={js:"",css:""}) {
+    return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=750, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Vir.js</title>
+      <link rel="stylesheet" href="../css/base.css">
+  </head>
+  <body>
+      <script src = "${model.vir}"></script>
+      <script src = "${op.js}"></script>
+  </body>
+  </html>`;
+  }
+  ,errorjs404(js){
+    return `Vir.addError("${js}.js can't find",404)`
+  }
+}
 
-console.log(vk);
+// console.log(vk);
 app.use('/', index);
 app.use('/users', users);
-app.get('/compute', function (req, res) {
-  // console.log(req.originalUrl);
-  var rus = wCompute.getMessage({
-    data:{
-      input:req.query.input
-      ,id :0
-      ,compute:"text"
-    }
-  })
-  res.send (rus);
-})
+// app.get('/compute', function (req, res) {
+//   // console.log(req.originalUrl);
+//   var rus = wCompute.getMessage({
+//     data:{
+//       input:req.query.input
+//       ,id :0
+//       ,compute:"text"
+//     }
+//   })
+//   res.send (rus);
+// })
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
@@ -73,13 +119,12 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  var jsName = reg.getJsFile(req.originalUrl);
+  if(jsName){
+    res.status( 200 );
+    res.send(model.errorjs404(jsName));
+  }else{
+    res.render('error');
+  }
 });
-
-var server = app.listen(3000, function () {
-  var host = server.address().address
-  var port = server.address().port
-  console.log("应用实例，访问地址为 http://%s:%s", host, port)
-})
-
 module.exports = app;
