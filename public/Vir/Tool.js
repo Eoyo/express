@@ -31,7 +31,9 @@ var Tool = {
         }
         doList(1, onearg);
     },
-    pluck(o, names) {
+
+    //return value array;
+    pluck(o = {one :"lium"}, names = ["one"]) {
         return names.map(n => o[n]);
     },
     extend(first, second) {

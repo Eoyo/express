@@ -179,7 +179,13 @@ var js = {
         }
         return first;
     },
-    Set: class _Set {
+    tick(ele, str) {
+        // var event = document.createEvent("UIEvent");
+        // event.initUIEvent("input",true,true);
+        // event.target = ele;
+        // ele.dispatchEvent(event);
+    }
+    , Set: class _Set {
         constructor() {
             this.set = Object.create(null);
             var Set = Set || null;
@@ -738,14 +744,14 @@ class Prop {
 var svg = {
     nameSpace: "http://www.w3.org/2000/svg"
     , circle(args) {
-        var doc = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        var doc = document.createElementNS(svg.nameSpace, "circle")
         doc.setAttribute("cx", args[0]);
         doc.setAttribute("cy", args[1]);
         doc.setAttribute("r", args[2]);
         return doc;
     }
     , rect(args) {
-        var doc = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+        var doc = document.createElementNS(svg.nameSpace, "rect")
         doc.setAttribute("x", args[0]);
         doc.setAttribute("y", args[1]);
         doc.setAttribute("width", args[2]);
@@ -755,7 +761,7 @@ var svg = {
         return doc;
     }
     , polygon(args) {
-        var doc = document.createElementNS("http://www.w3.org/2000/svg", "polygon")
+        var doc = document.createElementNS(svg.nameSpace, "polygon")
         if (args.length < 3) {
             doc.setAttribute("points", args[0]);
             return doc;
@@ -788,7 +794,7 @@ var svg = {
         }
     }
     , svg(viewBox) {
-        var doc = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        var doc = document.createElementNS(svg.nameSpace, "svg")
         viewBox && doc.setAttribute("viewBox", viewBox.join(" "));
         return doc;
     }
@@ -1165,6 +1171,8 @@ var Hif = {
         return ele.tagName.toLowerCase();
     }
     , setValIndex: ""
+
+    //set value for one js obj
     , setOnepVal(ele, key, value, cb) {
         switch (true) {
             case value instanceof DataLeaf:
@@ -1208,6 +1216,8 @@ var Hif = {
                 ele[key] = value;
         }
     }
+
+    //for dom element
     , setVal(ele, key, value, cb) {
         switch (true) {
             case value instanceof DataLeaf:
@@ -1276,6 +1286,11 @@ var Hif = {
                         break;
                     case "class":
                         ele.className = value;
+                        break;
+                    case "value":
+                        ele.value = value;
+                        js.tick(ele, "input");
+                        break;
                     default:
                         ele[key] = value;
                 }
@@ -1283,8 +1298,12 @@ var Hif = {
     },
     setChildren(ele, array) {
         var len = array.length;
-        for (var i = 0; i < len; i++) {
-            ele.appendChild(array[i]);
+        try {
+            for (var i = 0; i < len; i++) {
+                ele.appendChild(array[i]);
+            }
+        } catch (e) {
+            console.error(e);
         }
     },
     initSelector() {
@@ -1750,7 +1769,12 @@ class Dom {
     constructor(jsDom) {
         this.args = {};
         // var Evm = new EventManager();
-        var self = this;
+        var self = this
+            , isNum = /^[0-9]+$/
+            , parentProp = new Prop(".div")
+            , parentEle = [document.createElement("div")]
+            , trueParentEle = parentEle[0]
+            , parentRus = []
         function getDom(dom) {
             //for specail prop
             //for specails 
@@ -1765,19 +1789,32 @@ class Dom {
                 docs: []
             };
             //create docs;
+            var is_notcreateProp = false;
+            if (dom instanceof Array) {
+                var arrNum = dom.length;
+                var arrMode = "parents"
+                is_notcreateProp = true;
+            }
             for (let x in dom) {
                 if (x == "") continue;
                 if (Dom.is_specail(x)) {
                     rus.has[x] = dom[x];
                     continue;
                 }
+                var domRus;
+                var dnext = dom[x];
+
+                if (is_notcreateProp && isNum.test(x)) {
+                    workForFinalEle(parentProp, parentEle[parentEle.length - 1], +x)
+                    continue;
+                }
+
                 //avoid duplitly analizing
                 var prop = Hif.Cac.do(x, Prop);
+
                 /**Prop.name 生成记录当前的 ele 的变量
                  * it is an ele[]
                  */
-                var domRus;
-                var dnext = dom[x];
                 //判断name 是否存在于this.dom上
                 //多于一个时变为数组;
                 function addValueName(name, oneEle) {
@@ -1801,6 +1838,7 @@ class Dom {
                 function workForChildren(chilProp, parent, index) {
                     for (let i = 0; i < chilProp.num; i++) {
                         let oneEle = Hif.creatEle(chilProp);
+
                         addValueName(chilProp.name, oneEle);
                         parent.appendChild(oneEle);
                         if (chilProp.Children) {
@@ -1812,10 +1850,39 @@ class Dom {
                     }
                 }
                 function workForFinalEle(fprop, fEle, index) {
+                    var temp = parentProp;
+                    parentProp = fprop;
+                    parentEle.push(fEle);
+
                     switch (true) {
                         case js.isPrimitive(dnext):
-                            // var tmpele = Hif.creatEle(fprop);
+                            //dosomthing with fEle
+                            if (arrNum > 1) {
+                                var newEle = Hif.creatEle(fprop);
+                                var oldEle = parentEle[parentEle.length - 2];
+
+                                if (index == 0 && fEle.parentElement == null) {
+                                    arrMode = "useRus";
+                                    parentRus[parentRus.length - 1].docs = [];
+                                }
+
+                                if (arrMode == "useRus") {
+                                    fEle = newEle;
+                                    parentRus[parentRus.length - 1].docs.push(fEle);
+                                } else {
+                                    if (fEle.parentElement) {
+                                        trueParentEle = fEle.parentElement
+                                    } else {
+                                        trueParentEle.appendChild(fEle);
+                                    }
+                                }
+                                //default:
+                                parentEle[parentEle.length - 2] = newEle;
+                                addValueName(fprop.name, fEle);
+                            }
+                            //default: 
                             Hif.setVal(fEle, "innerHTML", dnext);
+
                             // rus.docs.push(tmpele);
                             break;
                         case dnext instanceof ArrayData:
@@ -1824,15 +1891,25 @@ class Dom {
                             // rus.docs.push(tmpele);
                             break;
                         case typeof dnext == "object":
+                            parentRus.push(rus);
                             domRus = getDom(dnext);
                             Dom.initSpecail(fEle, domRus, index);
                             Hif.addDocs(fEle, domRus);
+                            parentRus.pop();
                             break;
                     }
+
+                    //递归后的pop,回返
+                    parentProp = fprop;
+                    parentEle.pop();
                     js.Sp(fEle).notify("created");
                 }
                 //analy prop
                 for (let j = 0; j < prop.num; j++) {
+                    //null node is none
+                    if (dnext === null) {
+                        break;
+                    }
                     let oneEle = Hif.creatEle(prop);
                     //want to return docs
                     rus.docs.push(oneEle);
@@ -1874,14 +1951,31 @@ class Dom {
     }
 }
 function Vir(ele, jsHiv) {
-    var dom;
+    var dom
+        , doEle =document.body
+
+    // ele is true
     if (jsHiv) {
         dom = new Dom(jsHiv);
-        var doEle = "";
-    } else {
+        switch (true) {
+            case typeof ele == "object":
+                doEle = ele;
+                break;
+            default:
+                try {
+                    doEle = document.querySelectorAll(ele)
+                }
+                catch (e) {
+                    console.error(e);
+                }
+                return;
+                break;
+        }
+    }
+    else {
         var dom = new Dom(ele);
     }
-    Hif.setChildren(document.body, dom.html);
+    Hif.setChildren(doEle, dom.html);
     return dom.args;
     //deal with for {}
 }
@@ -1944,10 +2038,16 @@ var error = {
     }
 }
 
-function For(from, cb) {
+function For(from = {}, cb = () => { }, extend = {}) {
     switch (true) {
         case Array.isArray(from):
-            from.forEach();
+            var rus = [];
+            from.forEach(function (v, i, t) {
+                var onep = cb.call(this, v, i, t);
+                rus.push(onep);
+            });
+            js.extend(rus, extend)
+            return rus;
             break;
         case (from instanceof ArrayData):
             var dataList = from.srData;
@@ -1976,14 +2076,18 @@ function For(from, cb) {
 }
 
 function ajax(op = {
-    type: "GET"
+    type: "GET" || "POST"
     , async: true
     , url: ""
     , success(data = "") { }
-    , error(data = "",xhr){}
+    , error(data = "", xhr) { }
 }) {
     var xhr = new XMLHttpRequest();
     var queryStr = "";
+    if (op.async == undefined) {
+        op.async = true;
+    }
+
     if (op.type == "GET") {
         if (op.data) {
             var head = '?';
@@ -2010,8 +2114,8 @@ function ajax(op = {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 op.success && op.success(e.target.response);
-            }else{
-                op.error && op.error(e.target.response,xhr);
+            } else {
+                op.error && op.error(e.target.response, xhr);
             }
         }
     }
@@ -2025,28 +2129,28 @@ function virRequire(op = {
     , css: [
         "base.css"
     ]
-}){
+}) {
     var head = document.head;
     if (op.css) {
-        op.css.forEach((v)=>{
+        op.css.forEach((v) => {
             var style = document.createElement("style");
             ajax({
-                async:true
-                ,type:"GET"
-                ,url:op.cssDir + v
-                ,success(data){
+                async: true
+                , type: "GET"
+                , url: op.cssDir + v
+                , success(data) {
                     style.innerHTML = data;
                     head.appendChild(style);
                     console.log(ok);
                 }
-                ,error(data,xhr){
-                    console.error(xhr,data);
+                , error(data, xhr) {
+                    console.error(xhr, data);
                 }
             })
         })
     }
-    if(op.js){
-        op.js.forEach((v,i)=>{
+    if (op.js) {
+        op.js.forEach((v, i) => {
             var jsc = document.createElement("script");
             jsc.src = v;
             head.appendChild(jsc);
@@ -2070,14 +2174,36 @@ window.onerror = function (mes) {
  * 
  */
 /**
- * 2017 8 25 
+ * 更新日志::
+ * 
+ * 2017 8 23 
  * 修复了bug : 
  *  class 离子化
  * 添加功能:
  *  virjs file 加载的错误提示
  *  data 对象的数组 assign
  *  virRequire 功能
+ * 
+ * 2017 8 24 
+ *  For 支持普通数组
+ *  For 在普通数组时可以extend , 只可以single array;
+ * 
+ * 2017 8 25
+ *  null节点阻断解析;
+ *  支持array 节点;
+ * 
+ * 
+ * 2017 8 29 
+ *  js.tick 手动触发事件;
+ *  set value 默认触发input
+ *  在某个dom处插入Vir片段;( Vir 可以多参数 )
+ *  iframe 默认解析到src上
+ * 
+ * 2017 8 30 
+ *  use svg!
+ * 
  * 待添加的功能
  *  智能的set
+ * 
  *  
  */

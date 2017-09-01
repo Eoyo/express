@@ -3,6 +3,13 @@ var good = {
 }
 good = new Data(good);
 
+var dist = {
+    li: [
+        "vicii"
+        , "yani"
+    ]
+}
+
 var table = Vir({
     ".desc": "这是手动实现的table,在下面输入后按enter"
     , "input": {
@@ -14,16 +21,18 @@ var table = Vir({
             }
         }
     }
+
+    //手动的 table
     , ".mytable": {
         ".tr": For(good.list, (onep) => {
             return {
                 ".td": {
                     $: onep
                     , on: {
-                        
+
                         "click"(e) {
                             var index = onep.nodeName;
-                            good.list.splice(index,1);
+                            good.list.splice(index, 1);
                         }
                     }
                 }
@@ -31,10 +40,19 @@ var table = Vir({
         })
         , "3*.tr > 2*.td": {
             $: [
-                "m1","m2", "m3"
-                ,"m1","m2", "m3"
+                "m1", "m2", "m3"
+                , "m1", "m2", "m3"
             ]
         }
     }
+
+    //Array 自动配值的list
+    , "ul > li": dist.li
+
+    //Array 手动配值的list
+    , [`ul > ${dist.li.length}* li`]: {
+        $: dist.li
+    }
+
 })
-console.log(table.VVVVVV);
+console.log(table);

@@ -1,6 +1,6 @@
 @charset "utf-8";
 @import "image.sass";
-@import "tool/color.sass";
+@import "tool/color";
 @import "tool/layout";
 
 *{
@@ -36,6 +36,9 @@
     #{$className+1}{
         @content;
     }
+}
+@mixin Box(){
+    border : 1px solid gray;
 }
 @mixin Center($per){
     width: $per;

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SVG Document</title>
+    <style>
+        svg {
+            width: 400px;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path id="curve" d="M 10 100 C 200 30 300 250 350 50" stroke="black" fill="none" stroke-width="5" />
+        </defs>
+        <text id="T" style="font-family:ariel;font-size:16px" fill="black">
+            <textpath xlink:href="#curve">Hello, here is some text lying along a bezier curve.</textpath>
+        </text>
+
+        <!-- <g stroke="black" stroke-width="2" fill="none">
+            <ellipse id="g1" cx="100" cy="100" rx="75" ry="40" />
+            <use xlink:href="#g1" transform="rotate(30 100 100)" />
+            <use xlink:href="#g1" transform="rotate(60 100 100)" />
+        </g> -->
+        <g id="g3" stroke="black" stroke-width="2" fill="none">
+            <g id="g2">
+                <ellipse id="g1" cx="100" cy="100" rx="75" ry="40" />
+                <use xlink:href="#g1" transform="rotate(30 100 100)" />
+                <use xlink:href="#g1" transform="rotate(60 100 100)" />
+            </g>
+            <use xlink:href="#g2" transform="rotate(90 100 100)" />
+        </g>
+        <!-- 
+        <text x="0" y="100" font-size="80" fill="red">
+            Doing text
+        </text> -->
+    </svg>
+</body>
+
+</html>

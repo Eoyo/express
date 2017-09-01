@@ -108,8 +108,10 @@ test.threeChild.forEach((v)=>{
     ///绑定在最后生成的元素上;即为.son上;
 }
 ```
+
 分述在节点值为数组时触发;否则为复述
 >生成html为:
+
 ```html
 <div> 
     <div title = "son">son1</div>
