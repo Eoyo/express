@@ -1,5 +1,5 @@
 //looks more professional
-(window.Display = function (
+function Display(
     // default parameter ;
     op = {
         projs: [
@@ -127,4 +127,6 @@
 
     //test
     console.log(flu.getLink())
-})();
+}
+Display();
+exports = Display;

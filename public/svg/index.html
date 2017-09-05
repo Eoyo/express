@@ -11,6 +11,13 @@
             width: 400px;
             height: 300px;
         }
+        .block{
+            width: 200px;
+            height: 150px;
+        }
+        #front{
+            background: url(#bkg);
+        }
     </style>
 </head>
 
@@ -36,11 +43,34 @@
             </g>
             <use xlink:href="#g2" transform="rotate(90 100 100)" />
         </g>
-        <!-- 
-        <text x="0" y="100" font-size="80" fill="red">
-            Doing text
-        </text> -->
+
+        
     </svg>
+    <!-- base shape -->
+    <svg xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <filter id="blur-background">
+                <feImage xlink:href = "#dompBackground" result="bg"/>
+                <feGaussianBlur in="bg" stdDeviation="0" result="blur" />
+                <feComposite in1="blur" in2="SourceGraphic" operator="in" />
+                <feOffset dx="0" dy="0" result="offsetBlur" />
+            </filter>
+        </defs>
+        <g id = "background">
+            <rect x="0" y="0" width="60" height="60" style="fill:lightblue;stroke:blue;stroke-width: 10;" />
+        </g>
+        <foreignObject id = "dompBackground" x = "0" y = "0" width = "150" height="150">
+            <body xmlns = "http://www.w3.org/1999/xhtml">
+                <p>This is an XHTML paragraph
+                </p>
+            </body>
+        </foreignObject>
+        <circle cx="30" cy="30" r="30" style = "fill: #fff; filter:url(#blur-background);" />
+    </svg>
+    <p id="domp">
+        Hello!
+    </p>
+    <div id = "blurBlock">你好哦</div>
 </body>
 
 </html>
