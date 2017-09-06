@@ -1,6 +1,7 @@
 # Vir.js
+> *新** Vir的介绍太长了,看点小东西到: 六. 一些额外的小功能
 
-## 一.基本写法
+## 一.基本用法
 >index.html
 ```html
 <html>
@@ -21,14 +22,15 @@ var table = Vir({
     table:{
         "3*tr > 2*td"{
             $:[
-                1,2,3
-                ,4,5,6
+                1,2
+                ,3,4
+                ,5,6
             ]
         }
     }
 })
 ```
->于是你有了一个三行二列的 table;<div>目前还在设计开发,有些地方没确定下来,使用方法可能改动,但是基本语法不变,以下是语法篇;</div>
+>于是你有了一个三行二列的 table; 以下是语法篇;
 
 ## 一.属性名解析语法
 ### 1.基本的 id 与class 解析 : `"#id .class .classtwo"`
@@ -384,3 +386,30 @@ var dom3 = Vir({
 })
 // oh 长了许多....
 ```
+
+### 六. 一些额外的小功能
+>ps: 功能独立,实现是耦合的;就算Vir.js 你不喜欢,还有些小功能希望你喜欢
+
+#### 1.htmlString
+
+增加了String.prototype的方法; 让你轻便的生成html dom string; 如下javascript 代码:
+```js
+Vir.config(["htmlString"]); //声明你要用htmlString;
+
+var htmlStr =( "如果手机不能玩" + "游戏".span(".outstand") + "你还要吗??" ).prop("q .quote");
+console.log(htmlStr);
+/*
+
+输出为:
+"<q class = "quote">如果手机不能玩 <span class = "outstand">游戏</span>你还要吗??</q> "
+
+*/
+```
+
+<p>
+    htmlString 写起来更符合写代码的习惯;
+    1.span 显示地要用`span`包裹文字;
+    2.prop 通用的, 传入值使用Vir.js 的属性名语法;没有target 名,将默认用`div`包裹文字;
+</p>
+
+>ps:未完待续..

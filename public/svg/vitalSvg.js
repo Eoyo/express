@@ -4,12 +4,15 @@
  * drawboard
  */
 
+Vir.config(["htmlString"])
+
 // function vitalSvg(
 var op = {
     menu: {}
     , draw: {}
 }
 // ) {
+
 var draActive = null;
 var dra = {
     //self configure
@@ -611,7 +614,10 @@ var dom3 = Vir({
     // *新** For 也可以用普通的值为第一参数;,只是不能双向绑定了
     // ps: 想要 n参数的 For()??, 那样不好看了,算了;除非有必要;
     , "same as last one ul; ul":{
-        li : dt3.list
+        li : [
+            "good".span(".good #ni")
+            ,"你好".prop("div .geat")
+        ]
         ,args : {
             className : "ulList"
         }

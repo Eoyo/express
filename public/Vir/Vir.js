@@ -136,11 +136,11 @@ var Vir;
             else {
                 return true;
             }
-        },
-        isPrimitive(value) {
+        }
+        , isPrimitive(value) {
             return typeof value === 'string' || typeof value === 'number';
-        },
-        hasOwn(obj, key) {
+        }
+        , hasOwn(obj, key) {
             return Object.prototype.hasOwnProperty.call(obj, key);
         }
         //set ebumerable to false by defalut;
@@ -761,7 +761,7 @@ var Vir;
             args[5] && doc.setAttribute("ry", args[5]);
             return doc;
         }
-        , line (args){
+        , line(args) {
             var doc = globle.document.createElementNS(svg.nameSpace, "line")
             doc.setAttribute("x1", args[0]);
             doc.setAttribute("y1", args[1]);
@@ -1814,7 +1814,7 @@ var Vir;
                     var dnext = dom[x];
 
                     if (is_notcreateProp && isNum.test(x)) {
-                        workForDnext(parentProp, parentEle[parentEle.length - 1], +x,dnext)
+                        workForDnext(parentProp, parentEle[parentEle.length - 1], +x, dnext)
                         continue;
                     }
 
@@ -1844,21 +1844,21 @@ var Vir;
                             }
                         }
                     }
-                    function workForChildren(chilProp, parent, index,dnext) {
+                    function workForChildren(chilProp, parent, index, dnext) {
                         for (let i = 0; i < chilProp.num; i++) {
                             let oneEle = Hif.creatEle(chilProp);
 
                             parent.appendChild(oneEle);
                             if (chilProp.Children) {
                                 addValueName(chilProp.name, oneEle);
-                                workForChildren(chilProp.Children, oneEle, index * chilProp.num + i,dnext);
+                                workForChildren(chilProp.Children, oneEle, index * chilProp.num + i, dnext);
                             }
                             else {
-                                workForFinalEle(chilProp, oneEle, index * chilProp.num + i,dnext);
+                                workForFinalEle(chilProp, oneEle, index * chilProp.num + i, dnext);
                             }
                         }
                     }
-                    function workForDnext(fprop, fEle, index,dnext){
+                    function workForDnext(fprop, fEle, index, dnext) {
                         var temp = parentProp;
                         parentProp = fprop;
                         parentEle.push(fEle);
@@ -1917,16 +1917,16 @@ var Vir;
                         parentEle.pop();
                         js.Sp(fEle).notify("created");
                     }
-                    function workForFinalEle(fprop, fEle, index,dnext) {
-                        
-                        if(typeof dnext == "function"){
-                            addValueName(fprop.name, function(args){
-                                workForDnext(fprop,fEle,index,dnext.call(fEle,args));
+                    function workForFinalEle(fprop, fEle, index, dnext) {
+
+                        if (typeof dnext == "function") {
+                            addValueName(fprop.name, function (args) {
+                                workForDnext(fprop, fEle, index, dnext.call(fEle, args));
                             })
-                            workForDnext(fprop, fEle, index,dnext());
-                        }else{
-                            addValueName(fprop.name,fEle);
-                            workForDnext(fprop, fEle, index,dnext);
+                            workForDnext(fprop, fEle, index, dnext());
+                        } else {
+                            addValueName(fprop.name, fEle);
+                            workForDnext(fprop, fEle, index, dnext);
                         }
 
                     }
@@ -1942,11 +1942,11 @@ var Vir;
 
                         if (prop.Children) {
                             addValueName(prop.name, oneEle);
-                            workForChildren(prop.Children, oneEle, j,dnext);
+                            workForChildren(prop.Children, oneEle, j, dnext);
                         }
                         else {
                             //every times create new dom node
-                            workForFinalEle(prop, oneEle, j,dnext);
+                            workForFinalEle(prop, oneEle, j, dnext);
                         }
                     }
                 }
@@ -1987,9 +1987,9 @@ var Vir;
             switch (true) {
                 //auto data Bind;
                 case Array.isArray(ele):
-                    ele.forEach(function(v){
-                        for(var x in dom.args){
-                            if( v[x] === null){
+                    ele.forEach(function (v) {
+                        for (var x in dom.args) {
+                            if (v[x] === null) {
                                 v[x] = dom.args[x];
                             }
                         }
@@ -2201,7 +2201,7 @@ var Vir;
         var inNode = false;
         try {
             inNode = (module !== undefined)
-        }catch(e){
+        } catch (e) {
             inNode = false;
         }
         if (inNode) {
@@ -2218,7 +2218,7 @@ var Vir;
                                 inner += arg.children[i].outerHTML;
                             }
                             return inner;
-                        }else{
+                        } else {
                             return arg.inner;
                         }
                     }
@@ -2229,7 +2229,7 @@ var Vir;
                     , get outerHTML() {
                         return `<${targName} ${arg.getAttributeList()}>${arg.innerHTML}</${targName}>`
                     }
-                    , parentElement : null
+                    , parentElement: null
                     , setAttribute(attr, value) {
                         arg.list[attr] = value;
                     }
@@ -2244,7 +2244,7 @@ var Vir;
                         }
                         return str;
                     }
-                    , addEventListener(){
+                    , addEventListener() {
                         return true;
                     }
                     , list: {}
@@ -2278,17 +2278,49 @@ var Vir;
             globle.Vir = Vir;
         }
     }
+    var configurable = {
+        htmlString() {
+            js.extend(String.prototype, {
+                span(str = "") {
+                    var prop = new Prop("span" + str);
+                    var strEle = Hif.creatEle(prop);
+                    strEle.innerHTML = this.toString();
+                    return strEle.outerHTML;
+                }
+                , prop(str = "") {
+                    var prop = new Prop(str);
+                    var strEle = Hif.creatEle(prop);
+                    strEle.innerHTML = this.toString();
+                    return strEle.outerHTML;
+                }
+            })
+        }
+    }
+
+    //配置额外的功能
     initNodeFile(globle);
-    js.extend(globle,{
+    function config(ob = []) {
+        ob.forEach(function(v){
+            if(configurable[v] !== undefined && typeof configurable[v] == "function"){
+                configurable[v]();
+            }
+        })
+    }
+
+    //导出关键字;
+    js.extend(globle, {
         Vir
-        ,For
-        ,js
-        ,svg
-        ,Data
+        , For
+        , js
+        , svg
+        , Data
     })
-    js.extend(Vir,{
+    js.extend(Vir, {
         svg
+        , Prop
+        , config
     })
+
 }(this));
 //change 
 /**
@@ -2335,6 +2367,10 @@ var Vir;
  * 
  * 2017 9 5 
  *  函数式节点;
+ * 
+ * 2017 9 6
+ *  Prop,放在Vir上了.
+ * ...命令与插件,String的html优化
  * 
  * 待添加的功能
  *  智能的set
