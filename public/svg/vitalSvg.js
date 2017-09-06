@@ -588,6 +588,35 @@ var board = Vir([cmd, dra, po], {
     }
     */
 })
+var dt3 = {
+    list:[
+        "good"
+        ,"nice"
+    ]
+    ,title:"welcome"
+}
+var dom3 = Vir({
+    ".title":{
+        $:dt3.title
+    }
+    , "ul": For(
+        dt3.list
+        , (listr) =>( { li : listr } )
+        , {
+            args : {
+                className : "ulList"
+            }
+        }
+    )// *新** 三参数For(),第三个参数相当于写在"ul"上; 这里生成了: "ul.ulList > li ..."
+    // *新** For 也可以用普通的值为第一参数;,只是不能双向绑定了
+    // ps: 想要 n参数的 For()??, 那样不好看了,算了;除非有必要;
+    , "same as last one ul; ul":{
+        li : dt3.list
+        ,args : {
+            className : "ulList"
+        }
+    }
+})
 //dom Element bind
 window.addEventListener("keydown", function (e) {
     switch (e.keyCode) {

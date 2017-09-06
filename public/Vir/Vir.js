@@ -1814,7 +1814,7 @@ var Vir;
                     var dnext = dom[x];
 
                     if (is_notcreateProp && isNum.test(x)) {
-                        workForFinalEle(parentProp, parentEle[parentEle.length - 1], +x)
+                        workForDnext(parentProp, parentEle[parentEle.length - 1], +x,dnext)
                         continue;
                     }
 
