@@ -302,8 +302,25 @@ var Vir;
                 curDep = getDep(srObj);
                 return func;
             };
-        })(),
-        Cacher: class Cacher {
+        })()
+        , Watch(ob, prop = "", cbfunc = (newV, oldV) => { }) {
+            var obj = { [prop]: ob[prop] };
+            var newV = obj[prop];
+            Object.defineProperty(ob, prop, {
+                enumerable: false,
+                configurable: true,
+                get() {
+                    return newV;
+                },
+                set(v) {
+                    var oldV = newV;
+                    obj[prop] = v;
+                    cbfunc.call(obj, v, oldV);
+                    newV = obj[prop];
+                }
+            });
+        }
+        , Cacher: class Cacher {
             constructor(max) {
                 this.num = 0;
                 this.set = {};
@@ -337,8 +354,8 @@ var Vir;
                     return find;
                 }
             }
-        },
-        init() {
+        }
+        , init() {
             js.nextTick = (function () {
                 var callbacks = [];
                 var pending = false;
@@ -2273,6 +2290,7 @@ var Vir;
                 <h2>Oops! ${mes} </h2>
                 <p>please go to console to see what happend!</p>
                 <p>you can press :&nbsp;&nbsp;<a href='#'>ctrl+shif+I</a></p>
+                <p>Refesh to press  :&nbsp;&nbsp;<a href="#">ctrl+R</a></p>
             `)
             }
             globle.Vir = Vir;
@@ -2300,11 +2318,41 @@ var Vir;
     //配置额外的功能
     initNodeFile(globle);
     function config(ob = []) {
-        ob.forEach(function(v){
-            if(configurable[v] !== undefined && typeof configurable[v] == "function"){
+        ob.forEach(function (v) {
+            if (configurable[v] !== undefined && typeof configurable[v] == "function") {
                 configurable[v]();
             }
         })
+    }
+
+    var tes = {
+        //查看属性值的改动情况
+        watch(obj, prop) {
+            if(typeof prop == "object"){
+                for(let onep in prop){
+                    js.Watch(obj, onep, function (newV, oldV) {
+                        if(typeof prop[onep] == "function"){
+                            if( prop[onep].call(this,newV,oldV) === -1){
+                                console.log(onep + " is change from", oldV, "to", newV);
+                            }
+                        }else{
+                            console.log(onep + " is change from", oldV, "to", newV);
+                        }
+                    })
+                }
+            }else{
+                js.Watch(obj, prop, function (newV, oldV) {
+                    console.log(prop + "is change from", oldV, "to", newV);
+                })
+            }
+        }
+        ,list(obj){
+            if(typeof obj == "string"){
+                console.log(obj,globle[obj]);
+            }else{
+                console.log(obj)
+            }
+        }
     }
 
     //导出关键字;
@@ -2314,6 +2362,7 @@ var Vir;
         , js
         , svg
         , Data
+        , tes
     })
     js.extend(Vir, {
         svg
@@ -2371,6 +2420,9 @@ var Vir;
  * 2017 9 6
  *  Prop,放在Vir上了.
  * ...命令与插件,String的html优化
+ * 
+ * 2017 9 7
+ *  用于开发的test工具
  * 
  * 待添加的功能
  *  智能的set

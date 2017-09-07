@@ -33,6 +33,9 @@ var dra = {
     , width: 1000
     , height: 1000
 
+    /**
+     * 使用数组args = [ ["cx",12] , ["cy",12]]
+     */
     , setAttribute(doc, args = []) {
         for (var onep of args) {
             doc.setAttribute(onep[0], onep[1]);
@@ -143,6 +146,7 @@ var dra = {
         none(e) { return; }
         , moving(e) { return; }
         , start(e) { return; }
+        , end(e) { return; }
         , clear(str = ["moving", "start"]) {
             str.forEach((v) => {
                 this[v] = this.none;
@@ -174,7 +178,8 @@ var dra = {
         }
     }
     , startAt: [0, 0]
-    , drawing : false
+    , drawing: false
+    , clickTimes: 1
     , startDraw(e) {
         console.log(e);
         //add magic points
@@ -219,35 +224,57 @@ var dra = {
                         }
                     }
                 });
+                dra.clickTimes = 2;
                 break;
             case "circle":
                 dra.special.init({
                     start: "towClick"
                     , moving(e) {
-                        var dx = dra.crossAt[0] - dra.startAt[0];
-                        var dy = dra.crossAt[1] - dra.startAt[1];
+                        var at = dra.crossAt;
+                        var dx = at[0] - dra.startAt[0];
+                        var dy = at[1] - dra.startAt[1];
                         var r = Math.sqrt(dx * dx + dy * dy);
                         doc.setAttribute("r", r);
+                        circle.radius = r;
+                    }
+                    , end(){
+                        dra.clickTimes && po.clearDirty();
                     }
                 })
+                var circle = po.create("circle", [...dra.startAt, 0])
+                dra.hasDirty = true;
+                dra.clickTimes = 2;
                 break;
             case "line":
                 dra.special.init({
                     start: "none"
                     , moving(e) {
-                        doc.setAttribute("x2", dra.crossAt[0]);
-                        doc.setAttribute("y2", dra.crossAt[1]);
-                        line.to = dra.crossAt;
+                        var at = dra.crossAt;
+                        doc.setAttribute("x2", at[0]);
+                        doc.setAttribute("y2", at[1]);
+                        line.to = at;
+                    }
+                    , end() {
+                        console.log(dra.clickTimes);
+                        dra.clickTimes && po.clearDirty();
                     }
                 })
-                var line = po.create("line",dra.startAt.concat(dra.crossAt))
+                var line = po.create("line", dra.startAt.concat(dra.crossAt))
                 dra.hasDirty = true;
+                dra.clickTimes = 2;
                 break;
         }
-
     }
     , endDraw(e) {
-
+        if (dra.clickTimes > 0) {
+            dra.clickTimes--;
+        }
+        if (dra.clickTimes > 0) {
+            return;
+        } else {
+            dra.clear();
+            dra.special.end(e);
+        }
     }
     , movingTo(e) {
         //处理磁力点
@@ -260,6 +287,9 @@ var dra = {
         }
         dra.liveCross(x, y);
         dra.crossAt = [x, y];
+        if (dra.clickTimes <= 0) {
+            return;
+        }
         dra.special.moving(e);
         po.checkInter(e);
     }
@@ -268,19 +298,56 @@ var dra = {
     //history manager;
     //Dirty is something you think it is unnecessary
     , hasDirty: false
-    , clearDirty() {
+    , clearDirty(e) {
         if (dra.hasDirty) {
             dra.special.clear();
             dra.svg.removeChild(dra.active);
             dra.hasDirty = false;
-
-            //kill active one??
-            dra.active = null;
+            dra.clear();
+            dra.special.end(e);
+        }else{
+            console.log("don't have dirty")
         }
     }
+    , clear() {// 清除临时存储
+        dra.special.clear();
+        // dra.clickTimes = 0;
+        //kill active one??
+        dra.active = null;
+        dra.drawing = false;
+    }
     //history manager end;
+
+    // intersection adding;
+    , intersection: {
+        all: []
+        , add(circlePoint) {
+            this.all.push(circlePoint);
+        }
+        , render(arr = []) {
+            this.clear();
+            for (var v of arr) {
+                var onep = dra.create("point", v[0], v[1]);
+                onep.setAttribute("class", "intersection");
+                dra.svg.appendChild(onep);
+                this.add(onep);
+            }
+        }
+        , clear() {
+            try {
+                this.all.forEach(function (onep) {
+                    dra.svg.removeChild(onep)
+                })
+            }
+            catch (e) {
+                console.error(e);
+            }
+            this.all = [];
+        }
+    }
 }
 
+//几何处理器
 var geo = {
     mergeToLine(
         a = {
@@ -315,29 +382,41 @@ var geo = {
         }
     ) {
         var line = geo.mergeToLine(a, b);
-        return geo.linecircle(line, a);
+        return geo.circleline({ circle: a, line: line });
     }
     , circleline(
-        l = {
-            type: "line"
-            , abc: [1, 1, 0]
-        }
-        , c = {
-            type: "circle"
-            , radius: 1
-            , vpoint: [0, 0]
+        op = {
+            circle: {
+                type: "circle"
+                , radius: 1
+                , vpoint: [0, 0]
+            }
+            ,
+            line: {
+                type: "line"
+                , abc: [1, 1, 0]
+            }
         }
     ) {
-        var k = l.abc[0];
-        var t = l.abc[1];
-        var p = (l.abc[2] - k * c.vpoint[0] - t * c.vpoint[1]) / c.radius;
-
-        var cos = geo.getCos(k, t, p);
-        return cos.map(onep => {
-            return onep.map((v, i) => {
-                return v * c.radius + c.vpoint[i];
+        var [k, t, c] = [...op.line.abc];
+        var der = c - k * op.circle.vpoint[0] - t * op.circle.vpoint[1];
+        var rus;
+        if (op.circle.radius == 0 ) { //不全为零;
+            if (der == 0 && !(k || t || c)) {
+                return op.circle.vpoint;
+            }
+            return [];
+        } else {
+            var p = der / op.circle.radius;
+            var cos = geo.getCos(k, t, p);
+            rus = cos.map(onep => {
+                return onep.map((v, i) => {
+                    return v * op.circle.radius + op.circle.vpoint[i];
+                })
             })
-        })
+            rus.type = "aa";
+            return rus;
+        }
     }
     , lineline(
         l1 = {
@@ -347,9 +426,21 @@ var geo = {
             abc: [0.5, 2, 1]
         }
     ) {
-        var der = l1.abc[1] * l2.abc[0] - l1.abc[0] * l2.abc[1];
+        //@if old
+        // var a1 = li.abc[0]
+        // , b1 = li.abc[1]
+        // , c1 =  li.abc[2]
+        // , a2 = li.abc[0]
+        // , b2 = liabc[1] 
+        // , c2 = li.abc[2]
+        //@else
+        var [a1, b1, c1] = [...l1.abc];
+        var [a2, b2, c2] = [...l2.abc];
+        //@if end;
+
+        var der = a2 * b1 - a1 * b2;
         if (Math.abs(der) > 1e-6) {
-            return [(l1.abc[2] * l2.abc[1] - l1.abc[1] * l2.abc[2]) / der, (l1.abc[2] * l2.abc[0] - l1.abc[0] * l2.abc[2]) / der]
+            return [(c2 * b1 - c1 * b2) / der, (c1 * a2 - c2 * a1) / der]
         } else {
             return []
         }
@@ -357,6 +448,9 @@ var geo = {
     //k*cosx + t*sinx = p
     , getCos(k, t, p) {
         var ori = k * k + t * t;
+        if(ori == 0){
+            return [];
+        }
         var der = ori - p * p;
         if (der > 0) {
             var ax = (p * k - Math.sqrt(der) * t) / ori
@@ -392,20 +486,31 @@ var geo = {
         }
         return true;
     }
-    , disturb(ob,stick){
-        var hashCode = "";
-        if ( ob.type != stick.type){
-            hashCode = [ob.type,stick.type].sort().join("");
-        }else{
+    , disturb(ob, stick) {
+        var hashCode = ""
+            , func
+        if (ob.type != stick.type) {
+            hashCode = [ob.type, stick.type].sort().join("");
+            func = geo[hashCode];
+            if (func) {
+                return func({
+                    [ob.type]: ob
+                    , [stick.type]: stick
+                });
+            }
+            return [];
+        } else {
             hashCode = ob.type + stick.type;
+            func = geo[hashCode];
+            if (func) {
+                return func(ob, stick);
+            }
+            return [];
         }
-        var func = geo[hashCode];
-        if(func){
-            return func(ob,stick);
-        }
-        return [];
     }
 }
+
+//点的内部逻辑处理;
 var poActive = null;
 var po = {
     all: [
@@ -414,50 +519,73 @@ var po = {
             , vpoint: [0, 0]
         }
     ]
-    , display :null
+    //显示数值的;
+    , display: null
     //intersections;
-    , Xero : {
-        all :[]
-        ,add(obarr = []){
-            if(obarr.length > 0){
-                this.all.push(obarr);
-                return true;
-            }else{
-                return false;
+    , clearDirty() {
+        //清除内存
+        po.all.pop();
+        po.active = null;
+        //清除绘图
+        dra.intersection.clear();
+    }
+
+    //交点处理器
+    , Xero: {
+        all: []
+        , add(obarr = []) {
+            switch (obarr.type) {
+                case "aa":// array of array;
+                    this.all = this.all.concat(obarr);
+                    break;
+                default:
+                    if (obarr.length > 0) {
+                        this.all.push(obarr);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                    break;
             }
         }
-        ,render(){
+        , render() {
             po.display(this.all.join(","))
+            dra.intersection.render(this.all);
             this.all = [];
         }
-        ,configure(
-            ob={
-                color : "red"
+        , configure(
+            ob = {
+                color: "red"
             }
-        ){
+        ) {
             this.cf = ob;
         }
-        ,cf:null
+        , cf: null
     }
-    , set active(ob){
+    , set active(ob) {
         poActive = ob;
+        if(ob === null){
+            return;
+        }
         po.all.push(ob);
     }
-    , get active(){
+    , get active() {
         return poActive;
     }
-    , checkInter(e){
+    , checkInter(e) {
         var active = po.active;
-        if(!dra.drawing  || active === null ){
-            return ;
+        if (!dra.drawing || active === null) {
+            return;
         }
-        for(var i of po.all){
-            if(i!==active){
-                po.Xero.add ( geo.disturb(i,active));
+        for (var i of po.all) {
+            if (i !== active) {
+                po.Xero.add(geo.disturb(i, active));
             }
         }
         po.Xero.render();
     }
+
+    //在内存中创建一个用于计算的对象,返回其引用,标记其为活跃对象;
     , create(type = "circle", args = [0, 0, 3]) {
         var rus;
         switch (type) {
@@ -524,6 +652,10 @@ var cmd = {
     , history: null
     , newOnep: null
     , run(str) {
+        if (dra.drawing) {
+            console.error("can't run now");
+            return;
+        }
         if (str === undefined) {
             str = cmd.dt.value.get();
         }
@@ -533,10 +665,10 @@ var cmd = {
                 console.log("drawing the rect")
                 break;
         }
-        cmd.pushToHistory();
+        cmd.pushToHistory(str);
     }
-    , pushToHistory() {
-        cmd.dt.history.push(cmd.newOnep.value)
+    , pushToHistory(str) {
+        cmd.dt.history.push(str)
         cmd.dt.value.set("");
     }
     , focus() {
@@ -572,9 +704,9 @@ var board = Vir([cmd, dra, po], {
             }
         }
     }
-    , ".displaying ::display"(str = "liumiao"){
+    , ".displaying ::display"(str = "liumiao") {
         return {
-            $:str
+            $: str
         }
     }
     /* 暂未实现
@@ -591,38 +723,54 @@ var board = Vir([cmd, dra, po], {
     }
     */
 })
-var dt3 = {
-    list:[
-        "good"
-        ,"nice"
-    ]
-    ,title:"welcome"
-}
-var dom3 = Vir({
-    ".title":{
-        $:dt3.title
+
+
+var Test = {
+    drawTriangle() {
+        cmd.run("line");
+        dra.movingTo({
+            offsetX: 10
+            , offsetY: 10
+        })
+        dra.startDraw();
+
+        dra.movingTo({
+            offsetX: 100
+            , offsetY: 10
+        })
+        dra.startDraw()
+
+        dra.movingTo({
+            offsetX: 55
+            , offsetY: 40
+        })
+        dra.startDraw()
+
+        dra.movingTo({
+            offsetX: 10
+            , offsetY: 10
+        })
+        dra.startDraw();
+
+        dra.clearDirty();
     }
-    , "ul": For(
-        dt3.list
-        , (listr) =>( { li : listr } )
-        , {
-            args : {
-                className : "ulList"
+    , watchClickTimes() {
+        js.Watch(dra, "clickTimes", function (val) {
+            console.log(val, "change");
+        })
+    }
+    , init() {
+        tes.watch(dra, {
+            "clickTimes"(v) {
+                return -1;
             }
-        }
-    )// *新** 三参数For(),第三个参数相当于写在"ul"上; 这里生成了: "ul.ulList > li ..."
-    // *新** For 也可以用普通的值为第一参数;,只是不能双向绑定了
-    // ps: 想要 n参数的 For()??, 那样不好看了,算了;除非有必要;
-    , "same as last one ul; ul":{
-        li : [
-            "good".span(".good #ni")
-            ,"你好".prop("div .geat")
-        ]
-        ,args : {
-            className : "ulList"
-        }
+        });
+
+        tes.list("js");
     }
-})
+}
+
+
 //dom Element bind
 window.addEventListener("keydown", function (e) {
     switch (e.keyCode) {
@@ -630,12 +778,13 @@ window.addEventListener("keydown", function (e) {
             cmd.run();
             break;
         case 27:
-            dra.clearDirty();
+            dra.clearDirty(e);
             break;
         default:
             cmd.focus();
             break;
     }
 })
+Test.init();
 // }
 // vitalSvg();

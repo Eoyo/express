@@ -405,11 +405,8 @@ console.log(htmlStr);
 
 */
 ```
-
-<p>
     htmlString 写起来更符合写代码的习惯;
     1.span 显示地要用`span`包裹文字;
     2.prop 通用的, 传入值使用Vir.js 的属性名语法;没有target 名,将默认用`div`包裹文字;
-</p>
-
+    
 >ps:未完待续..
