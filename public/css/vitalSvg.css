@@ -1,11 +1,25 @@
 .main {
   border: 1px solid gray; }
 
+.console .consoleInput {
+  border: none;
+  padding: 0 5px 3px 5px;
+  font-size: 23px;
+  border-bottom: 2px solid #94b2bc; }
+  .console .consoleInput:focus {
+    border-bottom: 2px solid #66c7ea; }
+  .console .consoleInput:active {
+    border-bottom: 2px solid #94b2bc; }
+
 * {
   box-sizing: border-box; }
 
+input {
+  outline: none; }
+  input:active, input:focus {
+    outline: none; }
+
 .main {
-  cursor: none;
   width: 800px;
   height: 600px;
   position: relative; }
@@ -22,11 +36,39 @@
   .main .intersection {
     stroke: black;
     stroke-width: 0.5px;
-    fill: #1a0; }
+    fill: #1f0; }
   .main rect, .main circle, .main line {
     fill: none;
     stroke: black;
     stroke-width: 2px; }
+  .main svg {
+    cursor: none; }
+
+.console .coding {
+  margin: 5px 0; }
+
+.console .historyList > .onep {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 3px;
+  margin: 5px 0; }
+
+.console .wrongCommand {
+  color: red; }
+
+.tips {
+  border: 1px dashed rgba(0, 0, 0, 0.42);
+  margin: 20px 0; }
+  .tips > ul {
+    margin: 1px; }
+
+.wrap {
+  width: 400px;
+  height: 600px;
+  overflow: auto; }
+
+.tr > * {
+  float: left;
+  margin: 10px; }
 
 #blurBlock {
   position: fixed;

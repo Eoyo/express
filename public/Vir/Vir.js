@@ -2289,7 +2289,7 @@ var Vir;
                 document.write(`
                 <h2>Oops! ${mes} </h2>
                 <p>please go to console to see what happend!</p>
-                <p>you can press :&nbsp;&nbsp;<a href='#'>ctrl+shif+I</a></p>
+                <p>Console to press :&nbsp;&nbsp;<a href='#'>ctrl+shif+I</a></p>
                 <p>Refesh to press  :&nbsp;&nbsp;<a href="#">ctrl+R</a></p>
             `)
             }
@@ -2333,16 +2333,16 @@ var Vir;
                     js.Watch(obj, onep, function (newV, oldV) {
                         if(typeof prop[onep] == "function"){
                             if( prop[onep].call(this,newV,oldV) === -1){
-                                console.log(onep + " is change from", oldV, "to", newV);
+                                console.log(onep + " is changed from", oldV, "to", newV);
                             }
                         }else{
-                            console.log(onep + " is change from", oldV, "to", newV);
+                            console.log(onep + " is changed from", oldV, "to", newV);
                         }
                     })
                 }
             }else{
                 js.Watch(obj, prop, function (newV, oldV) {
-                    console.log(prop + "is change from", oldV, "to", newV);
+                    console.log(prop + "is changed from", oldV, "to", newV);
                 })
             }
         }
@@ -2419,10 +2419,13 @@ var Vir;
  * 
  * 2017 9 6
  *  Prop,放在Vir上了.
- * ...命令与插件,String的html优化
+ * ...命令与插件,String的html工具
  * 
  * 2017 9 7
  *  用于开发的test工具
+ * 
+ * 2017 9 8
+ *  二维分述.,结构函数;
  * 
  * 待添加的功能
  *  智能的set

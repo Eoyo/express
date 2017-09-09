@@ -1,46 +1,105 @@
 @import "Tool";
 
-//使用了绝对路径 localhost:3000
+@include Normalize;
 
-.main{
+//使用了绝对路径 localhost:3000
+// block
+.main {
     @extend %box;
-    cursor: none;
+
     width: 800px;
     height: 600px;
     position: relative;
-    .board{
+
+    .board {
         width: 100%;
         height: 100%;
     }
-    .circle{
+
+    .circle {
         border-radius: 100%;
         overflow: hidden;
     }
-    .crossLine{
+
+    .crossLine {
         stroke: black;
         stroke-width: 1px;
         stroke-dasharray: 2,2;
     }
+
     .intersection {
-        $color : #1a0;
+        $color: #1f0;
+
         stroke: black;
         stroke-width: 0.5px;
         fill: $color;
     }
-    rect, circle ,line{
-        fill:none;
+
+    rect, circle, line {
+        fill: none;
         stroke: black;
         stroke-width: 2px;
     }
+
+    svg {
+        cursor: none;
+    }
 }
-#blurBlock{
+
+.console {
+    .consoleInput {
+        @extend %underlineInput;
+    }
+
+    .coding {
+        margin: 5px 0;
+    }
+
+    .historyList > .onep {
+        $color: rgba(0, 0, 0, 0.1);
+
+        border: 1px solid $color;
+        padding: 3px;
+        margin: 5px 0;
+    }
+
+    .wrongCommand{
+        color:red;
+    }
+}
+.tips {
+    border: 1px dashed rgba(0, 0, 0, 0.42);
+    > ul {
+        margin: 1px;
+    }
+    margin: 20px 0;
+}
+
+//struct block
+.wrap {
+    width: 400px;
+    height: 600px;
+    overflow:auto;
+}
+
+
+.tr {
+    > * {
+        float: left;
+        margin: 10px;
+    }
+}
+
+//little
+#blurBlock {
     position: fixed;
     width: 300px;
     height: 300px;
-    left:0px;
-    top:0;
+    left: 0px;
+    top: 0;
     filter: blur(3px);
 }
-p{
+
+p {
     margin: 0;
 }

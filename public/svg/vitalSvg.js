@@ -6,6 +6,10 @@
 
 Vir.config(["htmlString"])
 
+var svgData = {
+    halfFace : '<line x1="287" y1="216" x2="437" y2="142"></line><line x1="437" y1="142" x2="467" y2="81"></line><line x1="467" y1="81" x2="489" y2="131"></line><line x1="489" y1="131" x2="518" y2="164"></line><line x1="518" y1="164" x2="515" y2="187"></line><line x1="515" y1="187" x2="453" y2="212"></line><line x1="453" y1="212" x2="465" y2="220"></line><line x1="465" y1="220" x2="435" y2="225"></line><line x1="435" y1="225" x2="406" y2="234"></line><line x1="406" y1="234" x2="430" y2="235"></line><line x1="430" y1="235" x2="387" y2="243"></line><line x1="387" y1="243" x2="375" y2="250"></line><line x1="375" y1="250" x2="391" y2="254"></line><line x1="391" y1="254" x2="348" y2="259"></line><line x1="348" y1="259" x2="351" y2="268"></line><line x1="351" y1="268" x2="367" y2="266"></line><line x1="367" y1="266" x2="318" y2="288"></line><line x1="318" y1="288" x2="311" y2="332"></line><line x1="311" y1="332" x2="308" y2="378"></line><line x1="308" y1="378" x2="333" y2="383"></line><line x1="333" y1="383" x2="347" y2="415"></line><line x1="347" y1="415" x2="327" y2="406"></line><line x1="327" y1="406" x2="341" y2="444"></line><line x1="341" y1="444" x2="334" y2="469"></line><line x1="334" y1="469" x2="335" y2="499"></line><line x1="335" y1="499" x2="329" y2="524"></line><line x1="329" y1="524" x2="306" y2="476"></line><line x1="306" y1="476" x2="277" y2="441"></line><line x1="277" y1="441" x2="275" y2="406"></line><line x1="275" y1="406" x2="262" y2="325"></line><line x1="262" y1="325" x2="277" y2="263"></line><line x1="277" y1="263" x2="287" y2="216"></line><line x1="477" y1="212" x2="483" y2="277"></line><line x1="483" y1="277" x2="523" y2="307"></line><line x1="523" y1="307" x2="543" y2="321"></line><line x1="543" y1="321" x2="513" y2="341"></line><line x1="513" y1="341" x2="497" y2="358"></line><line x1="497" y1="358" x2="513" y2="383"></line><line x1="513" y1="383" x2="522" y2="388"></line><line x1="522" y1="388" x2="523" y2="396"></line><line x1="523" y1="396" x2="529" y2="409"></line><line x1="529" y1="409" x2="506" y2="463"></line><line x1="506" y1="463" x2="454" y2="484"></line><line x1="454" y1="484" x2="438" y2="511"></line><line x1="334" y1="469" x2="342" y2="532"></line><line x1="415" y1="289" x2="427" y2="277"></line><line x1="427" y1="277" x2="439" y2="269"></line><line x1="439" y1="269" x2="458" y2="263"></line><line x1="458" y1="263" x2="472" y2="258"></line><line x1="472" y1="258" x2="457" y2="254"></line><line x1="457" y1="254" x2="431" y2="261"></line><line x1="431" y1="261" x2="412" y2="273"></line><line x1="412" y1="273" x2="415" y2="289"></line><line x1="421" y1="322" x2="442" y2="304"></line><line x1="442" y1="304" x2="477" y2="286"></line><line x1="477" y1="286" x2="467" y2="275"></line><line x1="467" y1="275" x2="452" y2="275"></line><line x1="452" y1="275" x2="424" y2="286"></line><line x1="424" y1="286" x2="423" y2="298"></line><line x1="423" y1="298" x2="425" y2="312"></line><line x1="446" y1="299" x2="449" y2="286"></line><line x1="449" y1="286" x2="460" y2="284"></line><line x1="460" y1="284" x2="471" y2="286"></line><circle cx="459" cy="292" r="3"></circle><circle cx="335" cy="347" r="3"></circle><circle cx="343" cy="425" r="3"></circle><line x1="344" y1="475" x2="372" y2="498"></line><line x1="372" y1="498" x2="454" y2="484"></line><line x1="326" y1="338" x2="311" y2="332"></line><line x1="311" y1="332" x2="293" y2="335"></line><line x1="293" y1="335" x2="282" y2="369"></line><line x1="282" y1="369" x2="328" y2="427"></line><line x1="328" y1="427" x2="357" y2="431"></line><line x1="357" y1="431" x2="352" y2="402"></line><line x1="352" y1="402" x2="348" y2="363"></line><line x1="348" y1="363" x2="326" y2="338"></line>'
+}
+
 // function vitalSvg(
 var op = {
     menu: {}
@@ -142,6 +146,19 @@ var dra = {
         }
     }
     , mode: "point"
+    , setMode(str){
+        switch(str){
+            case "circle":
+            case "rec":
+            case "rect":
+            case "point":
+            case "line" :
+            case "clear":
+                dra.mode = str;
+                return true;
+        }
+        return false;
+    }
     , special: {
         none(e) { return; }
         , moving(e) { return; }
@@ -237,7 +254,7 @@ var dra = {
                         doc.setAttribute("r", r);
                         circle.radius = r;
                     }
-                    , end(){
+                    , end() {
                         dra.clickTimes && po.clearDirty();
                     }
                 })
@@ -299,14 +316,18 @@ var dra = {
     //Dirty is something you think it is unnecessary
     , hasDirty: false
     , clearDirty(e) {
-        if (dra.hasDirty) {
-            dra.special.clear();
-            dra.svg.removeChild(dra.active);
-            dra.hasDirty = false;
-            dra.clear();
-            dra.special.end(e);
-        }else{
-            console.log("don't have dirty")
+        try {
+            if (dra.hasDirty && dra.active) {
+                dra.special.clear();
+                dra.svg.removeChild(dra.active);
+                dra.hasDirty = false;
+                dra.clear();
+                dra.special.end(e);
+            } else {
+                console.log("don't have dirty")
+            }
+        } catch (e) {
+            console.log("dirty clear failed(chinese english (~._.~)");
         }
     }
     , clear() {// 清除临时存储
@@ -315,6 +336,12 @@ var dra = {
         //kill active one??
         dra.active = null;
         dra.drawing = false;
+    }
+    , clearAll(){
+        dra.clear();
+        po.clearAll();
+        dra.svg.innerHTML = "";
+        dra.crossX = dra.crossY = null;
     }
     //history manager end;
 
@@ -401,7 +428,7 @@ var geo = {
         var [k, t, c] = [...op.line.abc];
         var der = c - k * op.circle.vpoint[0] - t * op.circle.vpoint[1];
         var rus;
-        if (op.circle.radius == 0 ) { //不全为零;
+        if (op.circle.radius == 0) { //不全为零;
             if (der == 0 && !(k || t || c)) {
                 return op.circle.vpoint;
             }
@@ -448,7 +475,7 @@ var geo = {
     //k*cosx + t*sinx = p
     , getCos(k, t, p) {
         var ori = k * k + t * t;
-        if(ori == 0){
+        if (ori == 0) {
             return [];
         }
         var der = ori - p * p;
@@ -522,6 +549,11 @@ var po = {
     //显示数值的;
     , display: null
     //intersections;
+    , clearAll (){
+        po.all = [];
+        po.active = null;
+        dra.intersection.clear();
+    }
     , clearDirty() {
         //清除内存
         po.all.pop();
@@ -549,7 +581,6 @@ var po = {
             }
         }
         , render() {
-            po.display(this.all.join(","))
             dra.intersection.render(this.all);
             this.all = [];
         }
@@ -564,7 +595,7 @@ var po = {
     }
     , set active(ob) {
         poActive = ob;
-        if(ob === null){
+        if (ob === null) {
             return;
         }
         po.all.push(ob);
@@ -646,20 +677,34 @@ var cmd = {
         value: "rec"
         , history: [
             "welcome !"
-            , "you can input cmd here"
+            , "you can input cmd here :"
+            , "> point  (default painting)"
         ]
     })
     , history: null
     , newOnep: null
     , run(str) {
-        if (dra.drawing) {
-            console.error("can't run now");
-            return;
-        }
         if (str === undefined) {
             str = cmd.dt.value.get();
         }
-        dra.mode = str;
+        if (dra.drawing) {
+            console.error("can't run " + str  + " now");
+            cmd.pushToHistory("Can't run " + str.span(".wrongCommand")  + " now!! Please finish current job first");
+            return;
+        }
+
+        //specail code
+        switch (str) {
+            case "clear":
+                dra.clearAll();
+                break;
+            default:
+                if( !dra.setMode( str )){
+                    cmd.pushToHistory("Can't find " + str.span(".wrongCommand"));
+                    return ;
+                }
+        }
+
         switch (str) {
             case "rec":
                 console.log("drawing the rect")
@@ -679,34 +724,55 @@ var cmd = {
         }
     }
 }
-var board = Vir([cmd, dra, po], {
-    ".main ::main": {
-        "svg .board ::svg": {
-            "circle(10,10,20)": ""
-            , on: {
-                mousedown: dra.startDraw
-                , mouseup: dra.endDraw
-                , mousemove: dra.movingTo
-            }
-        }
+
+var rwok = { //framework
+    show(){
+        
     }
-    , ".console": {
-        ".historyList ::history": For(cmd.dt.history, (onep) => {
-            return {
-                ".onep": onep.get()
-            }
-        })
-        , ".coding": {
-            "input .onep ::newOnep ": {
-                args: {
-                    model: cmd.dt.value
+}
+
+var board = Vir([cmd, dra, po,rwok], {
+    ".tr": {
+        ".main ::main": {
+            "svg .board ::svg": {
+                // $: svgData.halfFace
+                on: {
+                    mousedown: dra.startDraw
+                    , mouseup: dra.endDraw
+                    , mousemove: dra.movingTo
                 }
             }
         }
-    }
-    , ".displaying ::display"(str = "liumiao") {
-        return {
-            $: str
+        , ".wrap": {
+            ".console": {
+                ".historyList ::history": For(cmd.dt.history, (onep) => {
+                    return {
+                        ".onep": onep.get()
+                    }
+                })
+                , ".coding": {
+                    $: "命令: "
+                    , "input .consoleInput ::newOnep ": {
+                        args: {
+                            model: cmd.dt.value
+                        }
+                    }
+                }
+            }
+            , ".tips": {
+                "div": "小提示!", "ul > li": [
+                    "line : 画直线"
+                    , "circle:画圆"
+                    , "rec : 画矩形"
+                    , "可以实时显示交点"
+                    , "point : 画空心点"
+                ]
+            }
+            // , ".displaying ::display"(str = "liumiao") {
+            //     return {
+            //         $: str
+            //     }
+            // }
         }
     }
     /* 暂未实现
@@ -724,6 +790,7 @@ var board = Vir([cmd, dra, po], {
     */
 })
 
+// dra.ready();
 
 var Test = {
     drawTriangle() {
@@ -769,8 +836,6 @@ var Test = {
         tes.list("js");
     }
 }
-
-
 //dom Element bind
 window.addEventListener("keydown", function (e) {
     switch (e.keyCode) {
@@ -780,6 +845,9 @@ window.addEventListener("keydown", function (e) {
         case 27:
             dra.clearDirty(e);
             break;
+        case 9: //"tab"
+            work.show();
+            brea;
         default:
             cmd.focus();
             break;
