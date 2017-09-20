@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAKA,CAAC;EACG,UAAU,EAAE,UAAU;;ACL1B,KAAK;EACD,MAAM,EAAE,IAAI;EACZ,KAAK,EAAE,KAAK;EACZ,OAAO,EAAE,GAAG;EACZ,KAAK,EAAE,KAAK;EDsCZ,KAAK,ECrCW,GAAG;EDyCf,WAAW,EAAE,GAAe",
+"sources": ["../sass/Tool.scss","../sass/compute.sass"],
+"names": [],
+"file": "compute.css"
+}

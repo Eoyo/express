@@ -87,4 +87,12 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log("listening on:" + port);
 }
+
+
+/**
+ * serve 对象的函数:
+ * listen(port);
+ * on("error",cb) on("listen",cb)
+ */

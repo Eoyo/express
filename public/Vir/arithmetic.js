@@ -8,18 +8,18 @@ function Variable() {
     return arg;
 }
 var nodePrototype = {
-    eval(v){
+    eval(v) {
         var value = 0;
-        if(this.vari.eval){
+        if (this.vari.eval) {
             v = this.vari.eval(v)
         }
-        if(this.sign == '-'){
+        if (this.sign == '-') {
             value = -this.hes * v
-        }else{
+        } else {
             value = this.hes * v
         }
-        if(this.exp !== 1){
-            value = Math.pow(value,exp);
+        if (this.exp !== 1) {
+            value = Math.pow(value, exp);
         }
         return value;
     }
@@ -87,9 +87,6 @@ Item.opeFunc = {
     , "+": 2
     , "-": 2
 }
-Item.createNode(){
-
-}
 
 
 function Polynomial(str = "", type) {
@@ -140,75 +137,80 @@ function Polynomial(str = "", type) {
         , evalLastItem = ""
 
     //compile item str to stack;
-    if (type == 1) {
-        str += "\0";
-        len = str.length;
-        for (i = 0; i < len; i++) {
-            stri = str[i];
-            switch (las) {
-                case "start":
-                    switch (true) {
-                        case /[\(\)]/.test(stri):
-                            stack.push(str[i]);
-                            continue;
-                        case /[0-9]/.test(stri):
-                            las = "num";
-                            onep = str[i];
-                            continue;
-                        case /\w/.test(stri):
-                            las = "vari";
-                            onep = str[i];
-                            continue;
-                        case stri == " " || stri == "\0":
-                            continue;
-                        default:
-                            stack.push(str[i]);
-                            continue;
-                    }
-
-                case "num":
-                    if (str[i].match(/[0-9]/)) {
-                        onep += str[i];
-                    } else {
-                        if (onep) {
-                            try {
-                                stack.push(Number(onep));
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        }
-                        las = "start";
-                        i--;
+    str += "\0";
+    len = str.length;
+    for (i = 0; i < len; i++) {
+        stri = str[i];
+        switch (las) {
+            case "start":
+                switch (true) {
+                    case /[\(\)]/.test(stri):
+                        stack.push(str[i]);
                         continue;
-                    }
-                    break;
+                    case /[0-9]/.test(stri):
+                        las = "num";
+                        onep = str[i];
+                        continue;
+                    case /\w/.test(stri):
+                        las = "vari";
+                        onep = str[i];
+                        continue;
+                    case stri == " " || stri == "\0":
+                        continue;
+                    default:
+                        stack.push(str[i]);
+                        continue;
+                }
 
-                case "vari":
-                    if (str[i].match(/\w/)) {
-                        onep += str[i];
-                    } else {
-                        if (onep) {
+            case "num":
+                if (str[i].match(/[0-9]/)) {
+                    onep += str[i];
+                } else {
+                    if (onep) {
+                        try {
+                            stack.push(Number(onep));
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    las = "start";
+                    i--;
+                    continue;
+                }
+                break;
+
+            case "vari":
+                if (str[i].match(/\w/)) {
+                    onep += str[i];
+                } else {
+                    if (onep) {
+                        if(Math[onep]){
+                            varis[onep] = "Math."+onep;
+                        }else{
                             if (!varis[onep]) {
                                 varis[onep] = "varis[" + usi + "]";
                                 usi++;
                                 vax.push(onep);
                             }
-                            stack.push(varis[onep]);
                         }
-                        las = "start";
-                        i--;
-                        continue;
+
+                        stack.push(varis[onep]);
                     }
-                    break;
-            }
+                    las = "start";
+                    i--;
+                    continue;
+                }
+                break;
         }
+    }
+    if (type == 1) {
         return stack;
     }
 
     // compile stack to function ;
-    lastOne = "";
-    stack = ["'x'", "+", "(", 3, "*", "(", "'x'", "-", 4, ")", "*", "'y'", ")", "^", 3];
+    // stack = ["'x'", "+", "(", 3, "*", "(", "'x'", "-", 4, ")", "*", "'y'", ")", "^", 3];
     // stack = [3, "*", "x", "-", "y"];
+    lastOne = "";
     len = stack.length;
     if (type == 3) {
         for (i = 0; i < len; i++) {
@@ -247,7 +249,7 @@ function Polynomial(str = "", type) {
     }
 
     quo = []
-    qnm = 0;
+    qnm = -1;
     for (i = 0; i < len; i++) {
         if (uter) {
             lastOne = uter(stack[i])
@@ -256,10 +258,15 @@ function Polynomial(str = "", type) {
             switch (stack[i]) {
                 case "(":
                     if (lastOne) {
-                        fuc += lastOne;
+                        if(qnm<0){
+                            fuc += lastOne;
+                        }else{
+                            quo[qnm] += lastOne;
+                        }
                     }
                     qnm++;
                     quo[qnm] = "(";
+                    lastOne = "";
                     break;
                 case ")":
                     quo[qnm] += lastOne + ")";
@@ -271,8 +278,8 @@ function Polynomial(str = "", type) {
                     continue;
                 default:
                     if (qnm >= 0) {
-                        quo[qnm] += stack[i];
-                        lastOne = "";
+                        quo[qnm] += lastOne;
+                        lastOne = stack[i];
                     } else {
                         fuc += lastOne;
                         lastOne = stack[i];
@@ -289,6 +296,7 @@ function Polynomial(str = "", type) {
         assign(...args) {
             console.log(getValue(args));
         }
+        , varisLength: usi
         , see(...args) {
             if (args.length <= 0) {
                 return str;
@@ -307,19 +315,44 @@ function Polynomial(str = "", type) {
         , coheren() {
 
         }
-        , getVax() {
+        , getVax() { //获取变量名
             return vax;
         }
         , v(...args) {
             return getValue(args);
         }
+        , at(op = {
+            y: 0
+        }) {
+            return this;
+        }
+        , ifValue(val) {
+            if (arg.varisLength > 1) {
+                console.log("can't do it now!")
+                return;
+            } else {
+                var maxTime = 10;
+                function atX(x){
+                    if(maxTime<0){
+                        return x;
+                    }else{
+                        maxTime--;
+                    }
+                    var y = arg.v(x)
+                    , offset = y - val
+                    , y2 = arg.v(x-offset)
+                    if(offset<0.1 && offset>0.1){
+                        return x;
+                    }
+                    if(y2*y&&offset*(y+y2)>0){
+                        return atX(x - offset/2);
+                    }else{
+                        return atX(x + offset/2);
+                    }
+                }
+                return atX(0);
+            }
+        }
     }
     return arg;
 }
-
-
-function Mro(str, opt) {
-
-}
-var it = Polynomial("(3-(x-1)^2 )^2 + (2*v + i )^3", 3);
-console.log(it);

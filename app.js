@@ -22,9 +22,9 @@ var reg = {
   }
 }
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// // view engine setup
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -128,3 +128,33 @@ app.use(function (err, req, res, next) {
   }
 });
 module.exports = app;
+console.log(typeof app);
+/**
+ * 
+ * npm install node-sass 会出错;
+ * 用cnpm
+ * 成功安装的顺序:
+ * npm update
+ * npm install
+ * cnpm install
+ * //cnpm 只解决了一些npm的问题,只是cnpm 也有问题的
+ * 
+ * 
+ * 2017 9 17 
+ * app is a function;
+ * 
+ * 2017 
+ *  9 18
+ *  统一前后端:动态的模块导入,js代码前后端都可以跑;
+ *  seo适应的方案:直接使用url访问时js文件是渲染文件;之后的一面切换采用传json,or直接js;
+ *  
+  //cnpm 目录结构貌似有问题
+  ,
+    "devDependencies": {
+      "gulp": "^3.9.1",
+      "gulp-livereload": "^3.8.1",
+      "gulp-sass": "^3.1.0", //!!xx
+      "gulp-uglify": "^3.0.0"
+    }
+  
+ */

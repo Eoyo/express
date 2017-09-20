@@ -1,0 +1,37 @@
+@import "../Tool";
+
+.selector{
+    .title{
+        color:red;
+        user-select: none;
+    }
+    .list{
+        @include Double(".active"){
+            opacity: 1;
+            transform: translate(0px,0px) scale(1);
+        }
+        @include Double("&.show"){
+            opacity: 0;
+            visibility: "visible";
+            transform: translate(0px,0px) scale(1);
+        }
+        >div{
+            opacity: 0;
+            transform: translate(-2px,-2px) scale(0.98);
+            padding: 5px;
+            // margin: 5px;
+            // border-bottom: 1px solid gray;
+            &:hover{
+                background: rgba(202, 222, 150, 0.69);
+            }
+            &:active{
+                transform: translate(-2px,-2px) scale(0.98) !important;
+            }
+            transition: all .5s;
+        }
+        visibility: hidden;
+        border: 1px solid gray;
+        transition: all .5s;
+        transform: translate(-2px,-2px) scale(0.98);
+    }
+}

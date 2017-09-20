@@ -1,0 +1,44 @@
+@import "Tool";
+.list {
+    padding: 0 30px;
+    width: 100%;
+    @extend %Flex-Row;
+    > div {
+        width: 150px;
+        height: 100px;
+        border: 2px solid gray;
+        margin:30px;
+        padding: 10px;
+        transition: all .5s;
+        &:hover {
+            border: 2px solid #0088FF;
+            box-shadow: rgba(0, 0, 0, 0.4) 1px 2px 5px;
+        }
+    }
+}
+
+.head{
+    >div{
+        display: inline;
+        vertical-align: top;
+    }
+    .icon{
+        width: 40px;
+        height: 40px;
+    }
+    .des{
+        height: 40px;
+        font-size: 25px;
+        padding: 0 10px;
+        line-height: 40px;
+    }
+}
+
+.content{
+    width: 100%;
+}
+myh2{
+    display: block;
+    font-size: 25px;
+    font-weight: 200;
+}

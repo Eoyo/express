@@ -1,0 +1,13 @@
+* {
+  box-sizing: border-box; }
+
+.selector .title {
+  color: red; }
+.selector .list {
+  border: 1px solid gray; }
+  .selector .list > div active0 {
+    animation-name: u6p4l88zm; }
+  .selector .list > div active1 {
+    animation-name: u6p4l88zw; }
+
+/*# sourceMappingURL=select.css.map */

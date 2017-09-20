@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box; }
+
+.onep {
+  padding: 10px;
+  border: 1px solid gray; }
+
+.orange {
+  color: orange; }
+
+body, html {
+  margin: 0 0; }
+
+/*# sourceMappingURL=normal.css.map */

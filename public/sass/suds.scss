@@ -1,0 +1,93 @@
+/* ================
+// Suds
+// ============= */
+
+.suds {
+    position: relative;
+    height: 100%;
+}
+
+.sud {
+    position: absolute;
+    top: 100%;
+    border-radius: 50%;
+
+    @for $i from 1 through 50 {
+        &:nth-child(#{$i}) {
+            $size: random(100) * 0.075;
+
+            left: random(100) * 1%;
+            height: $size * 1vmin;
+            width: $size * 1vmin;
+            animation: bubble-up ($size * 1.5s + 1s) (0.05s * $i - 0.05s) infinite linear;
+
+            &:before {
+                animation: sway ($size * 0.75s) infinite ease-in-out;
+
+                $hue: random(255);
+                $sizepx: $size / 2 * 1vmin;
+
+                background: hsla($hue, 100, 60, 0.5);
+                box-shadow: 3px 3px $sizepx rgba(0, 0, 0, 0.1);
+
+                //   border: $size * .05em solid hsl(random(255), 90, 60)
+           
+            }
+        }
+    }
+
+    &:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        content: "";
+        background: currentColor;
+        border-radius: inherit;
+        transform: translate(-100%, 0);
+    }
+}
+
+@keyframes bubble-up {
+    100% {
+        transform: translate(0, calc(-100vh - 100%));
+    }
+}
+
+@keyframes sway {
+    50% {
+        transform: translate(100%, 0);
+    }
+}
+
+/* ================
+// Heading
+// ============= */
+
+h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    font-size: 10vmin;
+    font-weight: normal;
+    transform: translate(-50%, -50%);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* ================
+// Structure
+// ============= */
+
+html,
+body {
+    height: 100%;
+}
+
+html {
+    overflow: hidden;
+    font-family: 'Sacramento';
+    background: #aae;
+    color: #fff;
+}

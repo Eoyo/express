@@ -36,7 +36,7 @@ gulp.task("jsWatch", function () {
 gulp.task('watch', function () {
   liveReload.listen();
   // gulp.watch("public/mygulp/hivjs/*.js", ['jsWatch']);
-  gulp.watch("public/sass/*.sass", ["sass-for-sass"]);
-  gulp.watch("public/sass/*.scss", ["sass-for-scss"]);
+  gulp.watch("public/sass/**/*.sass", ["sass-for-sass"]);
+  gulp.watch("public/sass/**/*.scss", ["sass-for-scss"]);
 });
 gulp.task('default', ["sass-for-sass", "sass-for-scss", "watch"]);

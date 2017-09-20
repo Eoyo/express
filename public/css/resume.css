@@ -50,10 +50,6 @@ small {
     vertical-align: bottom; }
 
 .img {
-  width: 123px;
-  height: 123px;
-  background-image: url('../images/lium.jpg');
-  background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 100%;
@@ -65,11 +61,9 @@ small {
   .head .name > span {
     font-size: 25px;
     padding: 0 15px; }
-
 .head .aim {
   font-size: 20px;
   padding: 0 30px; }
-
 .head .contact {
   /*$hLen:   1*/
   /*$wLen:   2*/
@@ -87,7 +81,6 @@ small {
     left: 60%;
     top: 0;
     position: absolute; }
-
 .head .message {
   /*$hLen:   2*/
   /*$wLen:   2*/
@@ -173,3 +166,5 @@ foot {
   foot .desc {
     margin: 10px 0px;
     color: #eee; }
+
+/*# sourceMappingURL=resume.css.map */

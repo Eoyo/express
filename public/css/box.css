@@ -74,10 +74,8 @@
   height: 30px;
   border-radius: 50%;
   box-shadow: 0 0 5px lightgray; }
-
 #wturnqi.bai {
   background: white; }
-
 #wturnqi.hei {
   background: black; }
 
@@ -141,9 +139,8 @@
   #message.active0 {
     display: block;
     animation: 4s forwards;
-    animation-name: u66b69436; }
-
-@keyframes u66b69436 {
+    animation-name: u6p4l88zc; }
+@keyframes u6p4l88zc {
   0% {
     opacity: 0; }
   20% {
@@ -156,9 +153,8 @@
   #message.active1 {
     display: block;
     animation: 4s forwards;
-    animation-name: u43514eb8; }
-
-@keyframes u43514eb8 {
+    animation-name: u6p4l88zi; }
+@keyframes u6p4l88zi {
   0% {
     opacity: 0; }
   20% {
@@ -204,7 +200,6 @@
   to {
     opacity: 1;
     transform: scale 1.3; } }
-
 #msg {
   width: 300px;
   height: 560px;
@@ -253,7 +248,7 @@ body {
   height: 355px;
   background: #edede0; }
 
-/*div{
+    /*div{
 				background: rgba(123,123,123,0.3);
 			}*/
 .wap hr {
@@ -381,3 +376,5 @@ td {
 .divnode {
   height: 20px;
   width: 20px; }
+
+/*# sourceMappingURL=box.css.map */

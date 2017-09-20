@@ -45,10 +45,8 @@ nav {
     height: calc(100% - 40px);
     margin: 20px 20px;
     display: inline-block; }
-
 .content .td {
   display: inline-block; }
-
 .content .tr {
   width: 80%;
   margin: 0 5%;
@@ -75,3 +73,5 @@ nav {
       height: 100%;
       zoom: 20%;
       transform: scale(0.2); }
+
+/*# sourceMappingURL=display.css.map */

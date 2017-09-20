@@ -1,6 +1,6 @@
 
 //统一key name
-var Vir;
+// var Vir;
 (function (globle) {
     var keyCode = {
         "0": 48,
@@ -125,6 +125,13 @@ var Vir;
                 rus = abs[x] + rus;
             }
         }
+        , setValue(obj, prop, mapFunc) {
+            if (mapFunc.call) {
+                obj[prop] = mapFunc.call(obj, obj[prop], prop, obj);
+            } else {
+                obj[prop] = mapFunc(obj[prop], prop, obj);
+            }
+        }
         , isNotSimple(v) {
             var ty = js.getType(v);
             if (!ty) {
@@ -146,6 +153,7 @@ var Vir;
         //set ebumerable to false by defalut;
         ,
         def(obj, key, val, enumerable) {
+            js.set
             if (val === undefined)
                 val = obj[key];
             Object.defineProperty(obj, key, {
@@ -355,6 +363,39 @@ var Vir;
                 }
             }
         }
+        , getStorage(STORAGE_KEY) {
+            var localHave = localStorage.getItem(STORAGE_KEY);
+            try {
+                var storeArr = JSON.parse(localHave || '[]');
+            }
+            catch (e) {
+                storeArr = [];
+            }
+            return storeArr;
+        }
+        , finalStore(STORAGE_KEY, cb) {
+            window.addEventListener("unload", function (e) {
+                // alert("store the data")
+                var value = cb(e);
+                if (js.isPrimitive(value)) {
+                    localStorage.setItem(STORAGE_KEY, value);
+                } else {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+                }
+            });
+        }
+        , store(stObj = {
+            "some": {
+                set() { }
+                , get(str) { }
+            }
+        }) {
+            for (let x in stObj) {
+                let onep = stObj[x];
+                onep.get(Hif.getStorage(x));
+                Hif.finalStore(x, onep.set);
+            }
+        }
         , init() {
             js.nextTick = (function () {
                 var callbacks = [];
@@ -493,7 +534,7 @@ var Vir;
     js.init();
     class Prop {
         constructor(str) {
-            var arr = str.split(';');
+            var arr = str.split('; ');
             var sar;
             if (arr.length > 0) {
                 sar = arr.pop().split('');
@@ -836,7 +877,10 @@ var Vir;
         }
     }
 
-
+    var gr = {
+        uid: 0,
+        uid$2: 0
+    }
 
     var Hif = {
         creatEle(prop) {
@@ -978,30 +1022,6 @@ var Vir;
             initVerge(srObj, srkey) {
                 return;
             }
-        },
-        initObserve(value, asRootData) {
-            if (!js.isObject(value)) {
-                test.wrong();
-            }
-            var ob;
-            if (js.hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
-                ob = value.__ob__;
-            }
-            else if (config.observerState.shouldConvert &&
-                !test._isServer &&
-                (Array.isArray(value) || js.isPlainObject(value)) &&
-                Object.isExtensible(value) &&
-                !value._isVue) {
-                ob = new Observer(value);
-            }
-            if (asRootData && ob) {
-                ob.vmCount++;
-            }
-            return ob;
-        },
-        createWatcher(obj, key) {
-        },
-        createFollower(obj, key) {
         },
         getClass(classObj) {
             var str = "";
@@ -1380,7 +1400,7 @@ var Vir;
                 Hif.finalStore(x, onep.set);
             }
         }
-    };
+    }
     class EventFunc {
         constructor(str, func) {
             function getEvents(str) {
@@ -1714,10 +1734,6 @@ var Vir;
             super(dt, id, parent, x);
         }
     }
-    var gr = {
-        uid: 0,
-        uid$2: 0
-    };
     class Dep {
         constructor(forObj) {
             this.evPool = {};
@@ -1750,13 +1766,6 @@ var Vir;
                 data: (this.forObj.get && this.forObj.get()) || "",
                 from: this.forObj
             };
-            // switch (type) {
-            //     case "set":
-            //     case "change":
-            //     case "bubble":
-            //     case "array":
-            //     break;
-            // }
             this.do(ev);
             if (!Dep.isToIgnore(type)) {
                 this.emit("bubble", ev);
@@ -1794,6 +1803,9 @@ var Vir;
     class Dom {
         constructor(jsDom) {
             this.args = {};
+
+
+
             // var Evm = new EventManager();
             var self = this
                 , isNum = /^[0-9]+$/
@@ -1801,6 +1813,16 @@ var Vir;
                 , parentEle = [globle.document.createElement("div")]
                 , trueParentEle = parentEle[0]
                 , parentRus = []
+            function checkDnext(dnext) {
+                switch (dnext) {
+                    case window:
+                    case document:
+                    case undefined:
+                    case null:
+                        return false;
+                }
+                return true;
+            }
             function getDom(dom) {
                 //for specail prop
                 //for specails 
@@ -1879,7 +1901,14 @@ var Vir;
                         var temp = parentProp;
                         parentProp = fprop;
                         parentEle.push(fEle);
+                        if (!checkDnext(dnext)) {
+                            throw new Error("Can't set Vir like this:" + dnext);
+                            retrun;
+                        }
                         switch (true) {
+                            case dnext.type == "loader":
+                                dnext.setNextTickContext(fEle);
+                                break;
                             case js.isPrimitive(dnext):
                                 //dosomthing with fEle
                                 //when dnex is one value of an array;
@@ -1994,50 +2023,205 @@ var Vir;
             return !!specail[str];
         }
     }
-    function Vir(ele, jsHiv) {
-        var dom
-            , doEle = globle.document.body
 
-        // ele is true
-        if (jsHiv) {
-            dom = new Dom(jsHiv);
-            switch (true) {
-                //auto data Bind;
-                case Array.isArray(ele):
-                    ele.forEach(function (v) {
-                        for (var x in dom.args) {
-                            if (v[x] === null) {
-                                v[x] = dom.args[x];
-                            }
-                        }
-                    })
-                    break;
-                case typeof ele == "object":
-                    doEle = ele;
-                    break;
-                default:
-                    try {
-                        doEle = globle.document.querySelectorAll(ele)
-                    }
-                    catch (e) {
-                        console.error(e);
-                    }
-                    return;
-                    break;
+    // block engine;name as rwok;
+    var rwok = {
+        aimELe: null
+
+        //ele set for Vir_aimEle
+        , caption(ele) {
+            if (rwok.hasOne) {
+                throw new Error("Can't set caption now! Maybe  some file lost!")
+            }
+            rwok.aimELe = ele;
+        }
+        , hasOne: 0
+    }
+    var render = {
+        bodyVirTime: 0
+        , mode: "now"
+        , list: []
+        , add(doEle, domRus) {
+            var onep = {
+                doEle
+                , domRus
+                // ,mode:render.mode
+            }
+            render.list.push(onep);
+            return onep;
+        }
+        , run() {
+            var newList = [];
+            //只渲染一次
+            render.list.forEach(function (v) {
+                if (render.mode == "now") {
+                    Dom.initSpecail(v.doEle, v.domRus, 0);
+                    Hif.addDocs(v.doEle, v.domRus);
+                } else {
+                    newList.push(v);
+                }
+            })
+            delete render.list;
+            render.list = newList;
+        }
+    }
+    var load = {
+        script(src, cb) {
+            var script = globle.document.createElement("script");
+            globle.document.body.appendChild(script);
+            script.src = src;
+            script.onload = cb || function () {
+                console.log("OK");
             }
         }
-        else {
-            var dom = new Dom(ele);
+        , c_id: 0 //运行到的id
+        , id: 0
+        , fileContext: []
+        , fileticks: []
+        , createCtx() {
+            return {
+                length: 0
+                , c_id: -1
+            }
         }
-        Hif.setChildren(doEle, dom.html);
+        , getContext(key) {
+            var tick = load.whichTick();
+            var ctx = load.fileticks[tick];
+            var all = ctx.length - 1;
+            if (ctx && ctx.c_id < all) {
+                ctx.c_id++;
+                var rus = ctx[ctx.c_id];
+            } else {
+                console.error("Can't get context for this Vir")
+                return;
+            }
+            return rus;
+        }
+        , nextTickId: 0
+        , setNextTickContext(ele) {
+            load.setContext(ele, ++load.nextTickId);
+        }
+        , setContext(ele, tick) {
+            var tick = tick || load.whichTick();
+            if (!load.fileticks[tick]) {
+                var ctx = load.createCtx();
+                load.fileticks[tick] = ctx;
+            } else {
+                ctx = load.fileticks[tick];
+            }
+
+            if (ele) {
+                ctx[ctx.length] = ele;
+                ctx.length++;
+                return true;
+            } else {
+                if (!ctx[ctx.length]) {
+                    ctx[ctx.length] = globle.document.body
+                    ctx.length++;
+                    return true;
+                }
+            }
+            return false;
+        }
+        , ticking: false
+        , tick: -1
+        , whichTick() {
+            if (!load.ticking) {
+                js.nextTick(function () {
+                    load.ticking = false;
+                })
+                load.ticking = true;
+                load.tick++;
+                return load.tick;
+            } else {
+                return load.tick;
+            }
+        }
+    }
+    function Vir(ele, jsHiv) {
+        var dom
+            , doEle
+            , VirMode = 0;
+
+        // ele is true
+        switch (true) {
+            case typeof jsHiv == "string":
+                var rus = []
+                for (var x of ele.children) {
+                    if (x.className == jsHiv) {
+                        rus.push(x);
+                    }
+                }
+                if (rus.length > 1) {
+                    return rus;
+                } else {
+                    return rus[0];
+                }
+
+            case Array.isArray(jsHiv):
+                var rus = []
+                for (var x of ele.children) {
+                    if (x.className === jsHiv) {
+                        rus.push(x);
+                    }
+                    for (var i in jsHiv) {
+                        if (x.className === jsHiv[i]) {
+                            rus[i] = rus[i] || [];
+                            rus[i].push(x);
+                        }
+                    }
+                }
+                return rus;
+            case typeof jsHiv == "object":
+                if (!ele) {
+                    return jsHiv;
+                }
+                dom = new Dom(jsHiv);
+                switch (true) {
+                    //auto data Bind;
+                    case Array.isArray(ele):
+                        ele.forEach(function (v) {
+                            for (var x in dom.args) {
+                                if (v[x] === null) {
+                                    v[x] = dom.args[x];
+                                }
+                            }
+                            if (typeof v.main == "function") {
+                                v.main();
+                            }
+                        })
+                        VirMode = 1;
+
+                        break;
+                    case typeof ele == "object":
+                        doEle = ele;
+                        break;
+                    default:
+                        try {
+                            doEle = globle.document.querySelectorAll(ele)
+                        }
+                        catch (e) {
+                            console.error(e);
+                        }
+                        break;
+                }
+                break;
+            default:
+                VirMode = 1;
+                var dom = new Dom(ele);
+        }
+
+        if (VirMode == 1) {
+            load.setContext();
+            doEle = load.getContext();
+            if (doEle == undefined) {
+                throw new Error("context can't be undefined");
+            }
+        }
+        render.add(doEle, dom.domRus);
+        render.run();
         return dom.args;
         //deal with for {}
-    }
-    function createEle(eleName, str) {
-        return "<" + eleName + ">" + str + "</" + eleName + ">";
-    }
-    Vir.strong = function (str) {
-        return createEle("strong", str);
     }
     Vir.addError = function (str, code) {
         error.addError(str, code);
@@ -2296,6 +2480,7 @@ var Vir;
             globle.Vir = Vir;
         }
     }
+
     var configurable = {
         htmlString() {
             js.extend(String.prototype, {
@@ -2317,43 +2502,10 @@ var Vir;
 
     //配置额外的功能
     initNodeFile(globle);
-    function config(ob = []) {
-        ob.forEach(function (v) {
-            if (configurable[v] !== undefined && typeof configurable[v] == "function") {
-                configurable[v]();
-            }
-        })
-    }
 
-    var tes = {
-        //查看属性值的改动情况
-        watch(obj, prop) {
-            if(typeof prop == "object"){
-                for(let onep in prop){
-                    js.Watch(obj, onep, function (newV, oldV) {
-                        if(typeof prop[onep] == "function"){
-                            if( prop[onep].call(this,newV,oldV) === -1){
-                                console.log(onep + " is changed from", oldV, "to", newV);
-                            }
-                        }else{
-                            console.log(onep + " is changed from", oldV, "to", newV);
-                        }
-                    })
-                }
-            }else{
-                js.Watch(obj, prop, function (newV, oldV) {
-                    console.log(prop + "is changed from", oldV, "to", newV);
-                })
-            }
-        }
-        ,list(obj){
-            if(typeof obj == "string"){
-                console.log(obj,globle[obj]);
-            }else{
-                console.log(obj)
-            }
-        }
-    }
+    // test ,用于测试的工具;
+    // file loader
+    // 假设 file的loading 顺序是严格的;
 
     //导出关键字;
     js.extend(globle, {
@@ -2362,15 +2514,163 @@ var Vir;
         , js
         , svg
         , Data
-        , tes
+        , load
+        , Hif
     })
     js.extend(Vir, {
         svg
         , Prop
-        , config
+        , config(ob = []) {
+            ob.forEach(function (v) {
+                if (configurable[v] !== undefined && typeof configurable[v] == "function") {
+                    configurable[v]();
+                }
+            })
+        }
+        , createLoader(asyncStr) {
+            return function (str, cb) {
+                var virCb = null;
+                if (asyncStr == "sync") {
+                    render.mode = "sync"
+                }
+                load.script(str, function () {
+                    virCb && virCb();
+                    cb && cb();
+                    render.mode = "now";
+                    render.run();
+                });
+                return {
+                    setContext: load.setContext
+                    , setNextTickContext: load.setNextTickContext
+                    , type: "loader"
+                    , setCallBack(cbFunc) {
+                        virCb = cbFunc;
+                    }
+                }
+            }
+        }
+        , send(ele, op = {
+            eventName: "selected"
+            , type: "custom"
+            , detail: ""
+        }) {
+            switch (op.type) {
+                case "custome":
+                    var eve = document.createEvent("CustomEvent");
+                    eve.initCustomEvent(op.eventName, true, true, op.detail);
+                    ele.dispatchEvent(eve);
+                    break;
+                default:
+                    throw new Error("can't use this type: " + op.type + " now");
+                    break;
+            }
+        }
+        , modelInit(op = {
+            name: "selector"
+        }) {
+            if (this[op.name]) {
+                throw new Error("can't use this  name:" + op.name)
+            } else {
+                this[op.name] = null;
+            }
+            this.name = op.name;
+            return this;
+        }
     })
 
 }(this));
+
+
+//test 测试的functions
+var tes = {
+    //查看属性值的改动情况
+    watch(obj, prop) {
+        if (typeof prop == "object") {
+            for (let onep in prop) {
+                js.Watch(obj, onep, function (newV, oldV) {
+                    if (typeof prop[onep] == "function") {
+                        if (prop[onep].call(this, newV, oldV) === -1) {
+                            console.log(onep + " is changed from", oldV, "to", newV);
+                        }
+                    } else {
+                        console.log(onep + " is changed from", oldV, "to", newV);
+                    }
+                })
+            }
+        } else {
+            js.Watch(obj, prop, function (newV, oldV) {
+                console.log(prop + "is changed from", oldV, "to", newV);
+            })
+        }
+    }
+    //列出属性
+    , list(obj) {
+        if (typeof obj == "string") {
+            console.log(obj, globle[obj]);
+        } else {
+            console.log(obj)
+        }
+    }
+
+    //查找api
+    , find(obj, api = "none", show = false) {
+        console.log("Results for finding '" + api + "' in ", obj);
+        var style = {
+            gray: "color:#999;"
+            , args: "color:#f3c;"
+            , blue: "color:#33f;"
+            , black: "color:#e60;"
+            , gYellow: "color:#8a3;"
+        }
+        var typeColor = {
+            "function": style.blue
+            , "object": style.gYellow
+        }
+        var getType = {
+            "object": "%O"
+        }
+        var num = 0;
+        try {
+            var reg = new RegExp(api);
+        } catch (e) {
+            console.error(e);
+            return;
+        }
+        for (var x in obj) {
+            if (reg.test(x)) {
+                num++;
+                var func = new RegExp(x + "\\(([\\w ,]*)\\)");
+                var type = typeof obj[x];
+                var regResult = reg.exec(x);
+                api = regResult[0];
+                var ind = regResult.index;
+                var head = x.slice(0, ind);
+                var tail = x.slice(ind + api.length);
+                switch (type) {
+                    case "function":
+                        var argu = func.exec(obj[x].toString());
+                        var args = argu && argu[1];
+                        if (show) {
+                            console.log("%c" + head + "%c" + api + "%c" + tail + " %c(%c" + args + "%c)  ::%c " + type + "  %O", style.blue, style.black, style.blue, style.gray, style.args, style.gray, typeColor[type], obj[x]);
+                        } else {
+                            console.log("%c" + head + "%c" + api + "%c" + tail + " %c(%c" + args + "%c)  ::%c " + type, style.blue, style.black, style.blue, style.gray, style.args, style.gray, typeColor[type]);
+                        }
+                        break;
+                    default:
+                        // type = "default";
+                        // console.log("%c" + head + "%c" + api + "%c", style.blue, style.black, style.blue, style.gray, style.args, style.gray, typeColor[type]);
+                        var tc = typeColor[type] || style.gray;
+                        var ob = getType[type] || "";
+                        console.log("%c" + head + "%c" + api + "%c" + tail + "%c :: %c" + type + "  " + ob, style.blue, style.black, style.blue, style.gray, tc, obj[x]);
+                        break;
+                }
+            }
+        }
+        console.log("Results for finding '" + api + "' end!  Num of results is : ", num);
+    }
+}
+
+
 //change 
 /**
  * 改动了Dom 的workfor..函数("修复了生成两个dom的bug")
@@ -2422,13 +2722,28 @@ var Vir;
  * ...命令与插件,String的html工具
  * 
  * 2017 9 7
- *  用于开发的test工具
+ *  用于开发的test工具 //++
  * 
  * 2017 9 8
- *  二维分述.,结构函数;
+ *  二维分述.,结构函数; //++
  * 
- * 待添加的功能
- *  智能的set
+ * 2017 9 9
+ *  Vir 模块的显示
  * 
+ * 2017 9 10
+ *  Vir.loader, 实现了直接在Vir的dom树上load Vir.js的文件;
+ *  异步加载的单次显示 (不会抖屏了!),让渲染多等了一个回合,满足日常需求;
+ *  
+ * 2017 9 11 
+ *  js : set; 
+ *  循环加载的测试;
+ *  
+ * 2017 9 12
+ *  分述解构,批量获取;
+ *  Vir(ele,["div.class",".useful"]) //++ 使用Prop语法;
+ *  Vir模块标准的设定;init(),main();
+ *  Vir 对element 的special 设置,进一步摆脱jquery;
+ * 2017 9 14
+ *  Chrome 多彩的console
  *  
  */

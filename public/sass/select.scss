@@ -1,0 +1,18 @@
+@import "Tool";
+
+.selector{
+    .title{
+        color:red;
+    }
+    .list{
+        >div{
+            @include Double("active"){
+                @include Animation(){
+
+                }
+            }
+
+        }
+        border: 1px solid gray;
+    }
+}

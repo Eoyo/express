@@ -1,0 +1,212 @@
+body {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #aaa 25%, transparent 150%), repeating-linear-gradient(25deg, #c4e4e4, #c4e4e4 1px, transparent 2px, transparent 12px), linear-gradient(to bottom, #fff, #aaa);
+
+    .diamond {
+        transform-origin: 50% 100%;
+        animation: bouncing 1.7s ease-in-out infinite alternate;
+        position: relative;
+        transform-style: preserve-3d;
+
+        .sphere {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at top left, #c4e4e4 20%, #cc95c0);
+            box-shadow: 0 0 30px 1px #c4e4e4;
+            border-radius: 100%;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%) translateZ(5px);
+            transform-style: preserve-3d;
+            animation: bubbling 1.7s linear infinite;
+
+            @keyframes bubbling {
+                0% {
+                    box-shadow: 0 0 30px 1px #c4e4e4
+                    , -5px 0 2px -40px #c4e4e4
+                    , -30px -20px 2px -45px #c4e4e4
+                    , 10px -50px 2px -45px #c4e4e4
+                    , 20px -30px 2px -40px #c4e4e4
+                }
+                80%{
+                    box-shadow: 0 0 30px 1px #c4e4e4
+                    , -5px -90px 2px -40px rgba(196, 228, 228, 0.3)
+                    , -30px -90px 2px -45px rgba(196, 228, 228, 0.3)
+                    , 10px -110px 2px -45px rgba(196, 228, 228, 0.3)
+                    , 20px -110px 3px -41px rgba(196, 228, 228, 0.3)
+                }
+                100% {
+                    box-shadow: 0 0 30px 1px #c4e4e4
+                    , -5px -110px 2px -43px rgba(196, 228, 228, 0)
+                    , -30px -110px 2px -47px rgba(196, 228, 228, 0)
+                    , 10px -120px 2px -47px rgba(196, 228, 228, 0)
+                    , 20px -120px 3px -45px rgba(196, 228, 228, 0)
+
+                }
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 100%;
+                animation: bubbling 1.3s linear infinite;
+                animation-delay: -0.15s;
+                transform: scaleX(-1);
+            }
+        }
+
+        @keyframes bouncing {
+            0% {
+                transform: translateY(-25px);
+            }
+
+            100% {
+                transform: translateY(25px) scaleY(0.95);
+            }
+        }
+    }
+
+    .wrap {
+        width: 200px;
+        height: 200px;
+        perspective: 10000px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        margin-top: -100px;
+        animation: separate 3s ease-in-out infinite alternate;
+        transform-style: preserve-3d;
+
+        @keyframes separate {
+            0% {
+                transform: translateX(-50%) translateY(-50%);
+            }
+
+            60% {
+                transform: translateX(-50%) translateY(-50%);
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(calc(-50% - 75px)) rotateX(30deg);
+            }
+        }
+
+        &:nth-of-type(2) {
+            transform: translateX(-50%) translateY(-50%) scaleY(-1);
+            margin-top: 100px;
+            animation: separate2 3s ease-in-out infinite alternate;
+
+            @keyframes separate2 {
+                0% {
+                    transform: translateX(-50%) translateY(-50%) scaleY(-1);
+                }
+
+                60% {
+                    transform: translateX(-50%) translateY(-50%) scaleY(-1);
+                }
+
+                100% {
+                    transform: translateX(-50%) translateY(calc(-50% + 75px)) scaleY(-1) rotateX(30deg);
+                }
+            }
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: spinning 2.5s linear infinite;
+
+            @keyframes spinning {
+                0% {
+                    transform: rotateY(0deg);
+                }
+
+                100% {
+                    transform: rotateY(360deg);
+                }
+            }
+
+            .face {
+                margin: 0;
+                width: 200px;
+                height: 200px;
+                display: block;
+                position: absolute;
+                margin-top: 0.5px;
+                background: linear-gradient(45deg, #cc95c0, #dbd4b4, #7aa1d2);
+                background-size: 400% 400%;
+                animation: shine 2.5s linear infinite;
+                -webkit-clip-path: polygon(50% 0%, -1% 101%, 101% 101%);
+                clip-path: polygon(50% 0%, -1% 101%, 101% 101%);
+
+                @keyframes shine {
+                    0% {
+                        filter: brightness(1);
+                        background-position: 0% 50%;
+                    }
+
+                    50% {
+                        filter: brightness(1.25);
+                        background-position: 100% 50%;
+                    }
+
+                    100% {
+                        filter: brightness(1);
+                        background-position: 0% 50%;
+                    }
+                }
+
+                @for $i from 1 through 4 {
+                    &:nth-of-type(#{$i}) {
+                        animation-delay: #{$i / -1.25}s;
+                    }
+                }
+
+                &:nth-of-type(1) {
+                    //front
+                    transform: rotateY(0deg) translateZ(100px) rotateX(30deg);
+                    transform-origin: 50% 100%;
+                }
+
+                &:nth-of-type(2) {
+                    //left
+                    transform: rotateY(-90deg) translateZ(100px) rotateX(30deg);
+                    transform-origin: 50% 100%;
+                }
+
+                &:nth-of-type(3) {
+                    //right
+                    transform: rotateY(90deg) translateZ(100px) rotateX(30deg);
+                    transform-origin: 50% 100%;
+                }
+
+                &:nth-of-type(4) {
+                    transform: rotateY(0deg) translateZ(-100px) rotateX(-30deg);
+                    transform-origin: 50% 100%;
+                }
+            }
+        }
+    }
+}
+
+/*
+clip-path: circle();//polygon() 
+:nth-of-type()
+backgrond-position:
+
+transform-style: preserve-3d; 方式
+transform-origin: 50% 100%; 焦点
+*/

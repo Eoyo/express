@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://localhost:3000/css/normal.css">
+</head>
+
+<body>
+    <script src="http://localhost:3000/Vir/Vir.js"></script>
+    <iframe id = "iframe" src='data:text/html,
+        <link rel="stylesheet" href="http://localhost:3000/css/normal.css">
+        <canvas></canvas>
+        <script src="http://localhost:3000/Vir/Vir.js"></script>
+        <script src="http://localhost:3000/Vir/adv/three.js"></script>
+        <script src="http://localhost:3000/Vir/adv/Three/orbit.js"></script>
+        <script src="http://localhost:3000/Vir/adv/perlin.js"></script>
+        <script src="http://localhost:3000/Vir/adv/dat.gui.js"></script>
+        <script src="http://localhost:3000/VirDemo/3D/nucleus.js"></script>' frameborder="0" width="100%" height = "100%">
+    </iframe>
+    <script>
+        var frame = {
+            iframe : document.getElementById("iframe")
+            , stop(){
+                frame.iframe.setAttribute("sandbox","notallow-scripts");
+            }
+        }
+        tes.find(frame.iframe,"script");
+    </script>
+</body>
+
+</html>
+
+<!-- 
+    黑科技:
+    iframe data url
+ -->

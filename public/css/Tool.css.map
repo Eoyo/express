@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAKA,CAAC;EACG,UAAU,EAAE,UAAU",
+"sources": ["../sass/Tool.scss"],
+"names": [],
+"file": "Tool.css"
+}

@@ -139,10 +139,15 @@ test.threeChild.forEach((v)=>{
 #### 2. 为对象类型
 
 ### 7.标记 :`"Hidden; .parent"`
-同级的属性名不可以一样,否则会覆盖之前的;
-so,使用类似于"something; .className ",在最后一个";"前面为标记;
-最好是有意义的,调试的时候好看;
+>主要用途:
+* 解决同级的属性名不可以一样的问题;
+* 调试的时候好看, 相当于为属性写了注释
+* 强制避免无意义重复, 强制让代码更有意思;
 
+>注意事项:
+* 大量重复的用代码生成,使用分述等;
+* 为了与内联的style区分,`[style='color:blue;border:gray;']`,`;`后不打空格,style采用压缩写法
+* 标记是唯一要注意*空格*使用的语法;用于标记的分号`;`后必须加空格,否则会报错;
 ### 8*.svg
 部分支持了,正在开发
 可确定的特性有
@@ -181,7 +186,7 @@ so,使用类似于"something; .className ",在最后一个";"前面为标记;
 简单的extend到样式上;
 
 ### 4.args
-直接extend 到dom element对象上; 但特殊的有:'class离子化'
+相当于setAttribute 到dom element对象上; 但特殊的有:'class离子化'
 ```js
 args:{
     class:{
@@ -192,8 +197,7 @@ args:{
 //则className解析为: "song" (可被Data对象绑定)
 ```
 ### 5.on
-用于绑定各种事件
-特殊的有:
+用于绑定各种事件特殊的有:
 ```js
 on :{
     "created"(ele,index){//( ele:这个elememt ,index:第几个 )
@@ -387,7 +391,59 @@ var dom3 = Vir({
 // oh 长了许多....
 ```
 
-### 六. 一些额外的小功能
+### 六. 直接以js文件为模块
+> 前端文件的加载只能是异步的;Vir.js对dom的显示做了优化,以防异步模块加载造成的*闪动*;
+> 模块无需特别的申明为模块,能*独立运行*的Vir文件都可以为模块;
+具体用法如下:
+1. 创建加载器: `var Load = Vir.createLoader("sync");`
+2. 使用加载器加载文件到Vir的dom树节点上:　`, ".onep": Load("./vitalSvg.js")`
+```js
+
+var Load = Vir.createLoader("sync");  //*new**  创建加载器类型为:sync;
+var eoyo = Vir({
+    "0; h2": "head"
+    , ".onep": Load("./vitalSvg.js")  //*new** viralSvg.js 的Vir 全局上下文为当前文件中Vir生成的 `div.onep`
+    , "::ele": "Ok了"
+    , "1; h2": "tail"
+});
+
+// 同文件中你可以用多次的全局 Vir,会接着eoyo里的内容显示;
+var reok = Vir({ 
+    "0; h2": "head"
+    , "::ele": "Ok了"
+    , "1; h2": "tail"
+});
+//*alert** 你甚至可以自己加载自己,可以陷入循环加载,小心爆栈!;
+```
+
+3. 理论上是可以实现`愚蠢的自加载`的: (这个目前只能在浏览器端跑)
+>circleLoading.js
+```js
+//circleLoading.js
+(function (globle) {
+    var Load = Vir.createLoader("sync");
+
+    js.setValue(globle, "times", (v = 0)=> v + 1);
+
+    if (globle.times > 5) {
+        Vir({
+            ".orange": (globle.times>1 ? "最后的光辉!"+ (globle.times - 1) : null),
+            ".onep": "it is Over!"
+        })
+        return;
+    } else {
+        Vir({
+            ".orange": (globle.times>1 ? "意思一下!"+ (globle.times - 1) : null)
+            , ".onep": Load("./circleLoading.js")
+        });
+    }
+})(this);
+```
+
+> 结果是 :
+<div class="onep" style="padding:10px;border:1px solid gray"><div class="orange" style="color:orange">意思一下!1</div><div class="onep" style="padding:10px;border:1px solid gray"><div class="orange" style="color:orange">意思一下!2</div><div class="onep" style="padding:10px;border:1px solid gray"><div class="orange" style="color:orange">意思一下!3</div><div class="onep" style="padding:10px;border:1px solid gray"><div class="orange" style="color:orange">意思一下!4</div><div class="onep" style="padding:10px;border:1px solid gray"><div class="orange" style="color:orange">最后的光辉!5</div><div class="onep" style="padding:10px;border:1px solid gray">it is Over!</div></div></div></div></div></div>
+
+### 附. 一些额外的小功能
 >ps: 功能独立,实现是耦合的;就算Vir.js 你不喜欢,还有些小功能希望你喜欢
 
 #### 1.htmlString
@@ -408,5 +464,4 @@ console.log(htmlStr);
     htmlString 写起来更符合写代码的习惯;
     1.span 显示地要用`span`包裹文字;
     2.prop 通用的, 传入值使用Vir.js 的属性名语法;没有target 名,将默认用`div`包裹文字;
-    
 >ps:未完待续..

@@ -46,12 +46,10 @@ input {
 
 .console .coding {
   margin: 5px 0; }
-
 .console .historyList > .onep {
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 3px;
   margin: 5px 0; }
-
 .console .wrongCommand {
   color: red; }
 
@@ -80,3 +78,5 @@ input {
 
 p {
   margin: 0; }
+
+/*# sourceMappingURL=vitalSvg.css.map */

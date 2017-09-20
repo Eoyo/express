@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box; }
+
+.selector .title {
+  color: red;
+  user-select: none; }
+.selector .list {
+  visibility: hidden;
+  border: 1px solid gray;
+  transition: all .5s;
+  transform: translate(-2px, -2px) scale(0.98); }
+  .selector .list .active0 {
+    opacity: 1;
+    transform: translate(0px, 0px) scale(1); }
+  .selector .list .active1 {
+    opacity: 1;
+    transform: translate(0px, 0px) scale(1); }
+  .selector .list.show0 {
+    opacity: 0;
+    visibility: "visible";
+    transform: translate(0px, 0px) scale(1); }
+  .selector .list.show1 {
+    opacity: 0;
+    visibility: "visible";
+    transform: translate(0px, 0px) scale(1); }
+  .selector .list > div {
+    opacity: 0;
+    transform: translate(-2px, -2px) scale(0.98);
+    padding: 5px;
+    transition: all .5s; }
+    .selector .list > div:hover {
+      background: rgba(202, 222, 150, 0.69); }
+    .selector .list > div:active {
+      transform: translate(-2px, -2px) scale(0.98) !important; }
+
+/*# sourceMappingURL=selector.css.map */
