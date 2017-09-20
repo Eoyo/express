@@ -138,7 +138,7 @@ var app = {
                     }
                 }
                 , ".timer":()=>({
-                    $:timer.times;
+                    $:"次数:"+timer.times
                 })
             }
         }

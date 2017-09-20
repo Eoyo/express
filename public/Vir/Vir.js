@@ -1803,9 +1803,6 @@
     class Dom {
         constructor(jsDom) {
             this.args = {};
-
-
-
             // var Evm = new EventManager();
             var self = this
                 , isNum = /^[0-9]+$/
@@ -1813,6 +1810,9 @@
                 , parentEle = [globle.document.createElement("div")]
                 , trueParentEle = parentEle[0]
                 , parentRus = []
+
+            render.decorate(jsDom);
+
             function checkDnext(dnext) {
                 switch (dnext) {
                     case window:
@@ -1950,6 +1950,10 @@
                                 Hif.setVal(fEle, "", dnext);
                                 // rus.docs.push(tmpele);
                                 break;
+                            case dnext instanceof Dom:
+                                Dom.initSpecail(fEle, dnext.domRus, index);
+                                Hif.addDocs(fEle, dnext.domRus);
+                                break;
                             case typeof dnext == "object":
                                 parentRus.push(rus);
                                 domRus = getDom(dnext);
@@ -1966,9 +1970,11 @@
                     function workForFinalEle(fprop, fEle, index, dnext) {
 
                         if (typeof dnext == "function") {
-                            addValueName(fprop.name, function (args) {
+                            var dnextFunc = function dnextFunc(args) {
                                 workForDnext(fprop, fEle, index, dnext.call(fEle, args));
-                            })
+                            }
+                            addValueName(fprop.name, dnextFunc);
+                            render.addFunc(jsDom, dnextFunc);
                             workForDnext(fprop, fEle, index, dnext());
                         } else {
                             addValueName(fprop.name, fEle);
@@ -2041,7 +2047,7 @@
         bodyVirTime: 0
         , mode: "now"
         , list: []
-        , add(doEle, domRus) {
+        , addRus(doEle, domRus) {
             var onep = {
                 doEle
                 , domRus
@@ -2050,6 +2056,7 @@
             render.list.push(onep);
             return onep;
         }
+        //Render for Vir;
         , run() {
             var newList = [];
             //只渲染一次
@@ -2063,6 +2070,84 @@
             })
             delete render.list;
             render.list = newList;
+        }
+        , pools: []
+        , pool: {
+            current: -1
+            , getId() {
+                this.current++;
+                return this.current;
+            }
+            , add(jsDom) {
+                render.pools[jsDom._renderId] = [];
+            }
+            , get(jsDom) {
+                return render.pools[jsDom._renderId];
+            }
+            , needRender: false
+            , list: []
+        }
+        , addFunc(jsDom, func) {
+            if(jsDom._renderId == undefined){
+                console.warn("Reject no Id jsDom!")
+                return;
+            }
+            render.pool.get(jsDom).push(func);
+        }
+        // Render for detail
+        , circleRendering() {
+            if (render.pool.needRender) {
+                var pl = render.pool;
+                var ls = pl.list;
+                for(var x in ls){
+                    var funcs = render.pools [ ls[x]._renderId ];
+
+                    //run every func
+                    for(var fc of funcs){
+                        fc();
+                    }
+                    ls[x].needRender = false;
+                }
+                render.pool.needRender = false;
+                pl.list = [];
+            }
+            requestAnimationFrame(render.circleRendering);
+        }
+        , startRendering() {
+            if (window) {
+                window.requestAnimationFrame(render.circleRendering);
+            }else{
+                console.error("Can't run rendering at this space")
+            }
+        }
+        , decorate(jsDom) {
+            var backgroundRenderType = false;
+            Object.defineProperties(jsDom,
+                {
+                    "needRender": {
+                        enumerable: false
+                        , set(v) {
+                            if (v) {
+                                if(!backgroundRenderType){
+                                    render.pool.list.push(this);
+                                }
+                                backgroundRenderType = true;
+                                render.pool.needRender = true;
+                            } else {
+                                backgroundRenderType = false;
+                            }
+                        }
+                        , get() {
+                            return backgroundRenderType;
+                        }
+                    }
+                    , "_renderId":{
+                        value:render.pool.getId()
+                        ,enumerable:false
+                    }
+                }
+            );
+            render.pool.add(jsDom);
         }
     }
     var load = {
@@ -2138,7 +2223,7 @@
             }
         }
     }
-    function Vir(ele, jsHiv) {
+    function Vir(ele, jsHiv,create = false) {
         var dom
             , doEle
             , VirMode = 0;
@@ -2174,7 +2259,7 @@
                 return rus;
             case typeof jsHiv == "object":
                 if (!ele) {
-                    return jsHiv;
+                    return new Dom(jsHiv);
                 }
                 dom = new Dom(jsHiv);
                 switch (true) {
@@ -2218,7 +2303,7 @@
                 throw new Error("context can't be undefined");
             }
         }
-        render.add(doEle, dom.domRus);
+        render.addRus(doEle, dom.domRus);
         render.run();
         return dom.args;
         //deal with for {}
@@ -2577,7 +2662,7 @@
             return this;
         }
     })
-
+    render.startRendering();
 }(this));
 
 
