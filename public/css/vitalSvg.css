@@ -14,10 +14,16 @@
 * {
   box-sizing: border-box; }
 
-input {
-  outline: none; }
-  input:active, input:focus {
+input, button {
+  outline: none;
+  padding: 0;
+  margin: 0; }
+  input:active, input:focus, button:active, button:focus {
     outline: none; }
+
+a.wrapA {
+  color: inherit;
+  text-decoration: none; }
 
 .main {
   width: 800px;

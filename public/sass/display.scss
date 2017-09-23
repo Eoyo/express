@@ -1,7 +1,6 @@
 @import "Tool";
 
 //createProjs
-
 body {
     margin: 0px;
 }
@@ -53,14 +52,16 @@ nav {
             // 默认是baseline 对齐;
             // @include Box;
             @include normalLink;
+            @include Square(100%);
 
             padding: 10px;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 0 1px gray;
             border-radius: 5px;
-            &:hover {
-                box-shadow:  0 0 1px gray, 0 0 6px #32BBDD;
+            @include hoverShadow(){
+                border-radius: 5px;
+                box-shadow:  0 0 1px gray, 0 0 8px #32BBDD;
             }
             > iframe {
                 position: absolute;

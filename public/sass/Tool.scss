@@ -185,3 +185,8 @@
 @mixin Grid($arr){
     @include Grid-wh($arr,(1,1,1) ,(1,1,1) );
 }
+
+@mixin Square($size){
+    width: $size;
+    height: $size;
+}

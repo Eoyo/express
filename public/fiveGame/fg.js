@@ -4,7 +4,7 @@ if (!nwjs) {
 // nwjs.fiveGame = function () {
 // var proj = new Data(srProj)
 
-Hif.initStorage({
+js.store({
     "myName": {
         //读取时调用
         get(value) {
@@ -282,8 +282,7 @@ var chat = {
         //添加element
         var doc = this
         var str = doc.value;
-        var newHTML = chat.createOneDialog("Me", str)
-        Hif.addHTML(doa.chats, newHTML.html)
+        Vir(doa.chats,chat.createOneDialog("Me",str));
         doc.value = "";
 
         //添加动画
@@ -328,7 +327,7 @@ var chat = {
         } else {
             from = ".mysent";
         }
-        return new Dom({
+        return {
             [from]: {
                 ".head": {
                     $: littlename
@@ -337,7 +336,7 @@ var chat = {
                     $: str
                 }
             }
-        })
+        }
     }
 }
 

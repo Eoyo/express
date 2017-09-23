@@ -13,8 +13,8 @@ function Display(
                 , about: "use javascript to write html"
                 , list: [
                     "separated data from document"
-                    , "<a href = './display.js' >this pages</a> is write with vir.js"
-                    , "you create html dom, you don't need jquery"
+                    , "<a href = './display.js' >this page</a> is write with vir.js"
+                    , "Dom is you create ,jquery could go away!"
                 ]
                 , link: "./Vir"
             }
@@ -30,6 +30,15 @@ function Display(
             , {
                 title: "Chess"
                 , about: "you can play with yourshelf"
+            }
+            ,{
+                title: "vitalSvg.js"
+                , about: "create sample SVG with js"
+                , list: [
+                    "SVG , CAD"
+                    ,"So amazing!"
+                ]
+                , link: "./svg&file/builder.html"
             }
         ]
     }
@@ -69,7 +78,7 @@ function Display(
                 var oneTr = rus[trStr] || (rus[trStr] = {});
 
                 //add one child to oneTr
-                oneTr[i + "; div .onep"] = {
+                oneTr[i + `; a [href='${flu.getLink(v.link)}'] >div .onep`] = {
                     ".head": v.title
                     , ".desc": v.about
 
@@ -78,16 +87,8 @@ function Display(
                     , "ul > li": v.list || null
                     , on: {
                         click(e) {
-                            Vir(
-                                this,
-                                {
-                                    "iframe [width = '1024px' height = '768px']": {
-                                        args: {
-                                            src: flu.getLink(v.link)
-                                        }
-                                    }
-                                }
-                            )
+                            
+                            console.log(e.target);
                         }
                     }
                     , args: {

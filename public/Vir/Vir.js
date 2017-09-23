@@ -125,6 +125,22 @@
                 rus = abs[x] + rus;
             }
         }
+
+        //for functions, help you cross different context;
+        , funcsStore:{}
+        , getFunc(id){
+            var func = js.funcsStore[id];
+            if(func){
+                return func;
+            }else{
+                // console.warn("can't get this function");
+                return null;
+            }
+        }
+        , storeFunc(id,func){
+            js.funcsStore[id] = func;
+        } 
+
         , setValue(obj, prop, mapFunc) {
             if (mapFunc.call) {
                 obj[prop] = mapFunc.call(obj, obj[prop], prop, obj);
@@ -367,11 +383,27 @@
             var localHave = localStorage.getItem(STORAGE_KEY);
             try {
                 var storeArr = JSON.parse(localHave || '[]');
+                //长度为零的[] == false >>true;
             }
             catch (e) {
                 storeArr = [];
+                return storeArr;
             }
             return storeArr;
+            // try {
+            //     if(localHave){
+            //         var storeArr = JSON.parse(localHave);
+            //     }
+            //     //长度为零的[] == false >>true;
+            //     else{
+            //         storeArr = null;
+            //     }
+            // }
+            // catch (e) {
+            //     storeArr = null;
+            //     return storeArr;
+            // }
+            // return storeArr;
         }
         , finalStore(STORAGE_KEY, cb) {
             window.addEventListener("unload", function (e) {
@@ -392,8 +424,25 @@
         }) {
             for (let x in stObj) {
                 let onep = stObj[x];
-                onep.get(Hif.getStorage(x));
-                Hif.finalStore(x, onep.set);
+                if (!onep.get) {
+                    onep.get = function (data) {
+                        onep.from[onep.to] = data;
+                    }
+                    onep.set = function () {
+                        return onep.from[onep.to];
+                    }
+                }
+                var onepValue = onep.set();
+                var getStore = js.getStorage(x);
+                //use [] == false >>true; warn!!
+                onep.get(getStore == false ? onepValue : getStore);
+                if (onep.clear) {
+                    js.finalStore(x, function () {
+                        return "";
+                    })
+                } else {
+                    js.finalStore(x, onep.set);
+                }
             }
         }
         , init() {
@@ -1029,27 +1078,6 @@
                 str += classObj[oneclass] ? oneclass + " " : "";
             }
             return str;
-        },
-        getStorage(STORAGE_KEY) {
-            var localHave = localStorage.getItem(STORAGE_KEY);
-            try {
-                var storeArr = JSON.parse(localHave || '[]');
-            }
-            catch (e) {
-                storeArr = [];
-            }
-            return storeArr;
-        },
-        finalStore(STORAGE_KEY, cb) {
-            window.addEventListener("unload", function (e) {
-                // alert("store the data")
-                var value = cb(e);
-                if (js.isPrimitive(value)) {
-                    localStorage.setItem(STORAGE_KEY, value);
-                } else {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-                }
-            });
         },
         target: null,
         Spf: (function initSpecaiFunc() {
@@ -1803,6 +1831,7 @@
     class Dom {
         constructor(jsDom) {
             this.args = {};
+            this.jsDom = jsDom;
             // var Evm = new EventManager();
             var self = this
                 , isNum = /^[0-9]+$/
@@ -1906,7 +1935,10 @@
                             retrun;
                         }
                         switch (true) {
-                            case dnext.type == "loader":
+                            // case dnext._renderId !== undefined:
+                            //     render.setChild(jsDom, dnext);
+                            //     break;
+                            case dnext.type === "loader":
                                 dnext.setNextTickContext(fEle);
                                 break;
                             case js.isPrimitive(dnext):
@@ -1951,6 +1983,7 @@
                                 // rus.docs.push(tmpele);
                                 break;
                             case dnext instanceof Dom:
+                                render.setChild (jsDom,dnext.jsDom);
                                 Dom.initSpecail(fEle, dnext.domRus, index);
                                 Hif.addDocs(fEle, dnext.domRus);
                                 break;
@@ -1975,7 +2008,7 @@
                             }
                             addValueName(fprop.name, dnextFunc);
                             render.addFunc(jsDom, dnextFunc);
-                            workForDnext(fprop, fEle, index, dnext());
+                            workForDnext(fprop, fEle, index, dnext.call(fEle));
                         } else {
                             addValueName(fprop.name, fEle);
                             workForDnext(fprop, fEle, index, dnext);
@@ -2085,10 +2118,26 @@
                 return render.pools[jsDom._renderId];
             }
             , needRender: false
+
+            //jsDom list
             , list: []
         }
+        , setChild(parent, child) {
+            var par = parent._renderChild = parent._renderChild || [];
+            par.push({
+                "_renderId": child._renderId
+                , "_renderChild": child._renderChild
+            });
+        }
+
+        /*
+            jsDom = {
+                _renderId:0
+                ,_renderChild:[]
+            }
+         */
         , addFunc(jsDom, func) {
-            if(jsDom._renderId == undefined){
+            if (jsDom._renderId == undefined) {
                 console.warn("Reject no Id jsDom!")
                 return;
             }
@@ -2096,27 +2145,38 @@
         }
         // Render for detail
         , circleRendering() {
+            //if have some thing to render in render pool;
             if (render.pool.needRender) {
                 var pl = render.pool;
-                var ls = pl.list;
-                for(var x in ls){
-                    var funcs = render.pools [ ls[x]._renderId ];
+                function renderLeaf(ls) {
+                    //ls neeed Render jsDom list
+                    for (var x in ls) {
+                        //ls[x] has children
+                        // render that is relatived;
+                        if (ls[x]._renderChild) {
+                            renderLeaf(ls[x]._renderChild);
+                        }
 
-                    //run every func
-                    for(var fc of funcs){
-                        fc();
+                        var funcs = render.pools[ls[x]._renderId];
+                        //run every func
+                        for (var fc of funcs) {
+                            fc();
+                        }
+                        ls[x].needRender = false;
                     }
-                    ls[x].needRender = false;
+                    render.pool.needRender = false;
+                    pl.list = [];
                 }
-                render.pool.needRender = false;
-                pl.list = [];
+
+                //render that call to render;
+                renderLeaf(pl.list);
             }
             requestAnimationFrame(render.circleRendering);
         }
         , startRendering() {
             if (window) {
                 window.requestAnimationFrame(render.circleRendering);
-            }else{
+            } else {
                 console.error("Can't run rendering at this space")
             }
         }
@@ -2128,7 +2188,7 @@
                         enumerable: false
                         , set(v) {
                             if (v) {
-                                if(!backgroundRenderType){
+                                if (!backgroundRenderType) {
                                     render.pool.list.push(this);
                                 }
                                 backgroundRenderType = true;
@@ -2141,9 +2201,9 @@
                             return backgroundRenderType;
                         }
                     }
-                    , "_renderId":{
-                        value:render.pool.getId()
-                        ,enumerable:false
+                    , "_renderId": {
+                        value: render.pool.getId()
+                        , enumerable: false
                     }
                 }
             );
@@ -2223,7 +2283,7 @@
             }
         }
     }
-    function Vir(ele, jsHiv,create = false) {
+    function Vir(ele, jsHiv, create = false) {
         var dom
             , doEle
             , VirMode = 0;
@@ -2556,11 +2616,11 @@
             // someThingWrong
             globle.onerror = function (mes) {
                 document.write(`
-                <h2>Oops! ${mes} </h2>
-                <p>please go to console to see what happend!</p>
-                <p>Console to press :&nbsp;&nbsp;<a href='#'>ctrl+shif+I</a></p>
-                <p>Refesh to press  :&nbsp;&nbsp;<a href="#">ctrl+R</a></p>
-            `)
+                    <h2>Oops! ${mes} </h2>
+                    <p>please go to console to see what happend!</p>
+                    <p>Console to press :&nbsp;&nbsp;<a href='#'>ctrl+shif+I</a></p>
+                    <p>Refesh to press  :&nbsp;&nbsp;<a href="#">ctrl+R</a></p>
+                `)
             }
             globle.Vir = Vir;
         }
@@ -2601,6 +2661,7 @@
         , Data
         , load
         , Hif
+        , Dep
     })
     js.extend(Vir, {
         svg
@@ -2663,6 +2724,13 @@
         }
     })
     render.startRendering();
+
+
+    //try to rewrite this function ;
+    var animation = globle.requestAnimationFrame;
+    globle.requestAnimationFrame = function (func){
+        animation(func);
+    }
 }(this));
 
 
@@ -2691,7 +2759,7 @@ var tes = {
     //列出属性
     , list(obj) {
         if (typeof obj == "string") {
-            console.log(obj, globle[obj]);
+            console.log(obj, window[obj]);
         } else {
             console.log(obj)
         }
@@ -2831,4 +2899,14 @@ var tes = {
  * 2017 9 14
  *  Chrome 多彩的console
  *  
+ *2017
+ * 9 20
+ *  Vir Rendering ,like webGL circle rendering;
+ * 9 22
+ *  arr.push(0) => arr.length;!!
+ *  arr.unshift() =>arr.length;
+ * 
+ *  //单参数
+ *  arr.pop();
+ *  arr.shift();
  */

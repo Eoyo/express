@@ -716,10 +716,12 @@ var cmd = {
         cmd.dt.history.push(str)
         cmd.dt.value.set("");
     }
+    , focusInput:null
     , focus() {
-        if (document.activeElement == cmd.newOnep) {
+        if (cmd.focusInput == cmd.newOnep) {
             return;
         } else {
+            cmd.focusInput = cmd.newOnep
             cmd.newOnep.select();
         }
     }
@@ -755,6 +757,11 @@ var board = Vir([cmd, dra, po,rwok], {
                     , "input .consoleInput ::newOnep ": {
                         args: {
                             model: cmd.dt.value
+                        }
+                        ,on:{
+                            blur(e){
+                                cmd.focusInput = null;
+                            }
                         }
                     }
                 }
@@ -847,7 +854,7 @@ window.addEventListener("keydown", function (e) {
             break;
         case 9: //"tab"
             work.show();
-            brea;
+            break;
         default:
             cmd.focus();
             break;
